@@ -22,9 +22,9 @@ describe("Messenger", function () {
     expect(await messenger.numOfPendingLimits()).to.equal(numOfPendingLimits);
   });
 
-  it("Should revert with the right error if called too soon", async function () {
-    const { messenger, owner, otherAccount } = await loadFixture(
-      deployContract
-    );
+  it("Should set the right owner", async function () {
+    const { messenger, owner } = await loadFixture(deployContract);
+
+    expect(await messenger.owner()).to.equal(owner.address);
   });
 });
