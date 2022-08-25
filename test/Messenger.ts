@@ -16,15 +16,31 @@ describe("Messenger", function () {
     return { messenger, numOfPendingLimits, owner, otherAccount };
   }
 
-  it("Should set the right number of pending message limits", async function () {
-    const { messenger, numOfPendingLimits } = await loadFixture(deployContract);
+  describe("Deployment", function () {
+    it("Should set the right number of pending message limits", async function () {
+      const { messenger, numOfPendingLimits } = await loadFixture(
+        deployContract
+      );
 
-    expect(await messenger.numOfPendingLimits()).to.equal(numOfPendingLimits);
+      expect(await messenger.numOfPendingLimits()).to.equal(numOfPendingLimits);
+    });
+
+    it("Should set the right owner", async function () {
+      const { messenger, owner } = await loadFixture(deployContract);
+
+      expect(await messenger.owner()).to.equal(owner.address);
+    });
   });
 
-  it("Should set the right owner", async function () {
-    const { messenger, owner } = await loadFixture(deployContract);
+  describe("Post", function () {
+    it("Should set the right number of pending message limits", async function () {
+      const { messenger, numOfPendingLimits, otherAccount } = await loadFixture(
+        deployContract
+      );
 
-    expect(await messenger.owner()).to.equal(owner.address);
+      await expect(
+        messenger.post("first message", otherAccount.address, { value: 1 })
+      ).to.emit(messenger, "NewMessage");
+    });
   });
 });

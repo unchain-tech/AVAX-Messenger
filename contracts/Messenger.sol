@@ -21,9 +21,9 @@ contract Messenger {
     }
 
     // メッセージの受取人アドレスをkeyにメッセージを保存します。
-    mapping(address => Message[]) messagesAtAddress;
+    mapping(address => Message[]) private messagesAtAddress;
     // ユーザが保留中のメッセージの数を保存します。
-    mapping(address => uint256) numOfPendingAtAddress;
+    mapping(address => uint256) private numOfPendingAtAddress;
 
     event NewMessage(
         uint256 depositInWei,
