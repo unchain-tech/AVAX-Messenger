@@ -6,8 +6,7 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-      - run: npm init -y
-      - run: npm install --save-dev hardhat @openzeppelin/test-helpers
+      - run: npm install
       - uses: actions/checkout@v3
       - name: unit_test
         run: npx hardhat test
