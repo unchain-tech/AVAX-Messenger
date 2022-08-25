@@ -9,7 +9,7 @@ contract Messenger {
     address public owner;
 
     // ユーザが保留できるメッセージ数の上限を設定します。
-    uint256 numOfPendingLimits;
+    uint256 public numOfPendingLimits;
 
     struct Message {
         uint256 depositInWei;
