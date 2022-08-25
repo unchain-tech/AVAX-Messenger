@@ -8,6 +8,9 @@ contract Messenger {
     // コントラクトの所有者アドレスを保存します。
     address public owner;
 
+    // ユーザが保留できるメッセージ数の上限を設定します。
+    uint256 numOfPendingLimits;
+
     struct Message {
         uint256 depositInWei;
         uint256 timestamp;
@@ -18,7 +21,9 @@ contract Messenger {
     }
 
     // メッセージの受取人アドレスをkeyにメッセージを保存します。
-    mapping(address => Message[]) addressToMessages;
+    mapping(address => Message[]) messagesAtAdress;
+    // ユーザが保留中のメッセージの数を保存します。
+    mapping(address => uint256) numOfPendingAtAddress;
 
     event NewMessage(
         uint256 depositInWei,
@@ -32,11 +37,19 @@ contract Messenger {
     event MessageAccepted(address receiver, uint256 index);
     event MessageDenied(address receiver, uint256 index);
 
-    constructor() {
+    constructor(uint256 _numOfPendingLimits) {
         console.log("Here is my first smart contract!");
 
         // 所有者をデプロイしたアドレスに設定します。
         owner = msg.sender;
+
+        numOfPendingLimits = _numOfPendingLimits;
+    }
+
+    function changeNumOfPendingLimits(uint256 _limit) external {
+        require(msg.sender == owner, "sender must be owner");
+
+        numOfPendingLimits = _limit;
     }
 
     // ユーザからメッセージを受け取り, 状態変数に格納します。
@@ -44,7 +57,7 @@ contract Messenger {
         public
         payable
     {
-        addressToMessages[_receiver].push(
+        messagesAtAdress[_receiver].push(
             Message(
                 msg.value,
                 block.timestamp,
@@ -67,14 +80,7 @@ contract Messenger {
 
     // メッセージ受け取りを承諾して, AVAXを受け取ります。
     function accept(uint256 _index) public {
-        // 指定インデックスが配列の範囲を超えていないか確認します。
-        require(
-            _index < addressToMessages[msg.sender].length,
-            "Index is out of range"
-        );
-
-        // messageを使用して指定メッセージを操作できるようにします。
-        Message storage message = addressToMessages[msg.sender][_index];
+        Message storage message = sefeAccessToMessage(msg.sender, _index);
 
         // 署名者アドレスとメッセージの受取人アドレスが同じか確認します。
         require(
@@ -94,12 +100,7 @@ contract Messenger {
 
     // メッセージ受け取りを却下して, AVAXをメッセージ送信者へ返却します。
     function deny(uint256 _index) public payable {
-        require(
-            _index < addressToMessages[msg.sender].length,
-            "Index is out of range"
-        );
-
-        Message storage message = addressToMessages[msg.sender][_index];
+        Message storage message = sefeAccessToMessage(msg.sender, _index);
 
         require(
             msg.sender == message.receiver,
@@ -114,14 +115,27 @@ contract Messenger {
         emit MessageDenied(message.receiver, _index);
     }
 
-    function sendAvax(address payable _to, uint256 _amountInWei) public {
+    function sendAvax(address payable _to, uint256 _amountInWei) private {
         (bool success, ) = (_to).call{value: _amountInWei}("");
         require(success, "Failed to withdraw AVAX from contract.");
     }
 
-    function getAll() public view returns (Message[] memory) {
-        return addressToMessages[msg.sender];
+    // indexをチェックした上でMessage[]にアクセスします。
+    function sefeAccessToMessage(address _receiver, uint256 _index)
+        private
+        view
+        returns (Message storage)
+    {
+        // 指定インデックスが配列の範囲を超えていないか確認します。
+        require(
+            _index < messagesAtAdress[_receiver].length,
+            "Index is out of range"
+        );
+
+        return messagesAtAdress[_receiver][_index];
+    }
+
+    function getOwnMessages() public view returns (Message[] memory) {
+        return messagesAtAdress[msg.sender];
     }
 }
-
-// メッセージに有効期限を設ける, それを管理者のみ可能にする
