@@ -9,30 +9,28 @@ contract Messenger {
     address public owner;
 
     struct Message {
-        uint id;
-        uint depositInWei;
-        uint timestamp;
+        uint256 depositInWei;
+        uint256 timestamp;
         string text;
-        address sender;
+        bool isPending;
+        address payable sender;
         address payable receiver;
     }
 
-    Message[] allMessages;
-
-    // 受信者がまだ未確認に留めているメッセージのidを保存しています
-    mapping(address => uint[]) private receiverPendingMessages;
-
-    // メッセージがどのアドレスにより保留中かを保存します。
-    //mapping(uint => address) private pendingMessageToAdress;
+    // メッセージの受取人アドレスをkeyにメッセージを保存します。
+    mapping(address => Message[]) addressToMessages;
 
     event NewMessage(
-        uint id,
-        uint deposit,
-        uint timestamp,
+        uint256 depositInWei,
+        uint256 timestamp,
         string text,
+        bool isPending,
         address sender,
         address receiver
     );
+
+    event MessageAccepted(address receiver, uint256 index);
+    event MessageDenied(address receiver, uint256 index);
 
     constructor() {
         console.log("Here is my first smart contract!");
@@ -41,67 +39,89 @@ contract Messenger {
         owner = msg.sender;
     }
 
-    // ユーザからメッセージを受け取り変数に格納します。
-    function post(string memory _text, address payable _receiver) payable public {
-        uint newId = allMessages.length;
-        allMessages.push(
+    // ユーザからメッセージを受け取り, 状態変数に格納します。
+    function post(string memory _text, address payable _receiver)
+        public
+        payable
+    {
+        addressToMessages[_receiver].push(
             Message(
-                newId,
                 msg.value,
                 block.timestamp,
                 _text,
-                msg.sender,
+                true,
+                payable(msg.sender),
                 _receiver
             )
         );
-        receiverPendingMessages[_receiver].push(newId);
-        //pendingMessageToAdress[newId] = _receiver;
 
         emit NewMessage(
-            newId,
             msg.value,
             block.timestamp,
             _text,
+            true,
             msg.sender,
             _receiver
         );
     }
 
-    function accept(uint id) payable public {
-        // メッセージの受け取り人と署名者が同じか確認します。
+    // メッセージ受け取りを承諾して, AVAXを受け取ります。
+    function accept(uint256 _index) public {
+        // 指定インデックスが配列の範囲を超えていないか確認します。
         require(
-            msg.sender == allMessages[id].receiver, 
+            _index < addressToMessages[msg.sender].length,
+            "Index is out of range"
+        );
+
+        // messageを使用して指定メッセージを操作できるようにします。
+        Message storage message = addressToMessages[msg.sender][_index];
+
+        // 署名者アドレスとメッセージの受取人アドレスが同じか確認します。
+        require(
+            msg.sender == message.receiver,
             "The caller of the contract must be equal to the receiver of the message."
         );
 
         // メッセージの受取人にavaxを送信します。
-        (bool success, ) = (msg.sender).call{value: allMessages[id].depositInWei}("");
-        require(success, "Failed to withdraw AVAX from contract.");
+        sendAvax(message.receiver, message.depositInWei);
+
+        // メッセージの保留状態を解除します。
+        message.isPending = false;
+
+        // eventを投げます。
+        emit MessageAccepted(message.receiver, _index);
     }
 
-    function deny(uint id) payable public {
-        // メッセージの受け取り人と署名者が同じか確認します。
+    // メッセージ受け取りを却下して, AVAXをメッセージ送信者へ返却します。
+    function deny(uint256 _index) public payable {
         require(
-            msg.sender == allMessages[id].receiver, 
+            _index < addressToMessages[msg.sender].length,
+            "Index is out of range"
+        );
+
+        Message storage message = addressToMessages[msg.sender][_index];
+
+        require(
+            msg.sender == message.receiver,
             "The caller of the contract must be equal to the receiver of the message."
         );
 
         // メッセージの送信者にavaxを返却します。
-        (bool success, ) = (allMessages[id].sender).call{value: allMessages[id].depositInWei}("");
+        sendAvax(message.sender, message.depositInWei);
+
+        message.isPending = false;
+
+        emit MessageDenied(message.receiver, _index);
+    }
+
+    function sendAvax(address payable _to, uint256 _amountInWei) public {
+        (bool success, ) = (_to).call{value: _amountInWei}("");
         require(success, "Failed to withdraw AVAX from contract.");
     }
 
     function getAll() public view returns (Message[] memory) {
-        // ownerのみ全てのメッセージを閲覧することができます。
-        require(
-            msg.sender == owner,
-            "The caller of the contract must be equal to the contract owner."
-        );
-        return allMessages;
-    }
-
-    function getPending() public view returns (Message[] memory) {
-        // 該当するメッセージを返却する
-        return allMessages;
+        return addressToMessages[msg.sender];
     }
 }
+
+// メッセージに有効期限を設ける, それを管理者のみ可能にする
