@@ -3,11 +3,9 @@
 pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
+import "./Ownable.sol";
 
-contract Messenger {
-    // コントラクトの所有者アドレスを保存します。
-    address public owner;
-
+contract Messenger is Ownable {
     // ユーザが保留できるメッセージ数の上限を設定します。
     uint256 public numOfPendingLimits;
 
@@ -46,9 +44,8 @@ contract Messenger {
         numOfPendingLimits = _numOfPendingLimits;
     }
 
-    function changeNumOfPendingLimits(uint256 _limit) external {
-        require(msg.sender == owner, "sender must be owner");
-
+    // ownerのみこの関数を実行できるように修飾子を利用します。
+    function changeNumOfPendingLimits(uint256 _limit) external onlyOwner {
         numOfPendingLimits = _limit;
     }
 

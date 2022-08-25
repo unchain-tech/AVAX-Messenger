@@ -5,6 +5,7 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 // なぜdeploy時のvalueを渡せないのか
 // deploy時に渡すことができれば引き出しができるか
 // コメントアウトしている部分, getOwnMessagesを受け取りたい
+// amountが使えるようになったらそれをreturnして返すようにする
 
 describe("Messenger", function () {
   async function deployContract() {
@@ -14,9 +15,10 @@ describe("Messenger", function () {
     const numOfPendingLimits = 5;
 
     const Messenger = await hre.ethers.getContractFactory("Messenger");
-    const messenger = await Messenger.deploy(numOfPendingLimits, {
-      value: 100,
-    });
+    //const messenger = await Messenger.deploy(numOfPendingLimits, {
+    //  value: 100,
+    //});
+    const messenger = await Messenger.deploy(numOfPendingLimits);
 
     return { messenger, numOfPendingLimits, owner, otherAccount };
   }
@@ -34,6 +36,28 @@ describe("Messenger", function () {
       const { messenger, owner } = await loadFixture(deployContract);
 
       expect(await messenger.owner()).to.equal(owner.address);
+    });
+  });
+
+  describe("Change limits", function () {
+    it("Should revert with the right error if called by other account", async function () {
+      const { messenger, numOfPendingLimits, otherAccount } = await loadFixture(
+        deployContract
+      );
+
+      await expect(
+        messenger.connect(otherAccount).changeNumOfPendingLimits(5)
+      ).to.be.revertedWith("You aren't the owner");
+    });
+
+    it("Should set the right pending limits", async function () {
+      const { messenger, numOfPendingLimits } = await loadFixture(
+        deployContract
+      );
+
+      const newLimits = numOfPendingLimits + 1;
+      await messenger.changeNumOfPendingLimits(newLimits);
+      expect(await messenger.numOfPendingLimits()).to.equal(newLimits);
     });
   });
 
