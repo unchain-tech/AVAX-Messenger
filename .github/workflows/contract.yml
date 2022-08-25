@@ -6,11 +6,8 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt update
-      - run: sudo apt install curl git
-      - run: curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-      - run: sudo apt-get install -y nodejs
-      - run: npm install
       - uses: actions/checkout@v3
       - name: unit_test
-        run: npx hardhat test
+        run: |
+        npm install
+        npx hardhat test
