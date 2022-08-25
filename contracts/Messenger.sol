@@ -21,7 +21,7 @@ contract Messenger {
     }
 
     // メッセージの受取人アドレスをkeyにメッセージを保存します。
-    mapping(address => Message[]) messagesAtAdress;
+    mapping(address => Message[]) messagesAtAddress;
     // ユーザが保留中のメッセージの数を保存します。
     mapping(address => uint256) numOfPendingAtAddress;
 
@@ -57,7 +57,13 @@ contract Messenger {
         public
         payable
     {
-        messagesAtAdress[_receiver].push(
+        // メッセージ受取人の保留できるメッセージが上限に達しているかを確認します。
+        require(
+            messagesAtAddress[_receiver].length < numOfPendingLimits,
+            "The receiver has reached the number of pending limits"
+        );
+
+        messagesAtAddress[_receiver].push(
             Message(
                 msg.value,
                 block.timestamp,
@@ -128,14 +134,14 @@ contract Messenger {
     {
         // 指定インデックスが配列の範囲を超えていないか確認します。
         require(
-            _index < messagesAtAdress[_receiver].length,
+            _index < messagesAtAddress[_receiver].length,
             "Index is out of range"
         );
 
-        return messagesAtAdress[_receiver][_index];
+        return messagesAtAddress[_receiver][_index];
     }
 
     function getOwnMessages() public view returns (Message[] memory) {
-        return messagesAtAdress[msg.sender];
+        return messagesAtAddress[msg.sender];
     }
 }
