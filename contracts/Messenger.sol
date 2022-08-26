@@ -35,7 +35,7 @@ contract Messenger is Ownable {
     event MessageAccepted(address receiver, uint256 index);
     event MessageDenied(address receiver, uint256 index);
 
-    constructor(uint256 _numOfPendingLimits) {
+    constructor(uint256 _numOfPendingLimits) payable {
         console.log("Here is my first smart contract!");
 
         // 所有者をデプロイしたアドレスに設定します。

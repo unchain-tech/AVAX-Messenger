@@ -1,4 +1,5 @@
 import hre, { ethers } from "hardhat";
+import { Overrides } from "ethers";
 import { expect } from "chai";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 
@@ -15,10 +16,10 @@ describe("Messenger", function () {
     const numOfPendingLimits = 5;
 
     const Messenger = await hre.ethers.getContractFactory("Messenger");
-    //const messenger = await Messenger.deploy(numOfPendingLimits, {
-    //  value: 100,
-    //});
-    const messenger = await Messenger.deploy(numOfPendingLimits);
+    const messenger = await Messenger.deploy(numOfPendingLimits, {
+      value: 100,
+    } as Overrides);
+    //const messenger = await Messenger.deploy(numOfPendingLimits);
 
     return { messenger, numOfPendingLimits, owner, otherAccount };
   }
@@ -92,7 +93,7 @@ describe("Messenger", function () {
       await messenger.connect(otherAccount).accept(0);
       await expect(messenger.connect(otherAccount).accept(0)).to.emit(
         messenger,
-        "NewMessage"
+        "MessageAccepted"
       );
     });
   });
