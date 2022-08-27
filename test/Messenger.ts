@@ -3,25 +3,20 @@ import { Overrides } from "ethers";
 import { expect } from "chai";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 
-// なぜdeploy時のvalueを渡せないのか
-// deploy時に渡すことができれば引き出しができるか
-// コメントアウトしている部分, getOwnMessagesを受け取りたい
-// amountが使えるようになったらそれをreturnして返すようにする
-
 describe("Messenger", function () {
   async function deployContract() {
     // 初めのアドレスはコントラクトのデプロイに使用されます。
     const [owner, otherAccount] = await ethers.getSigners();
 
     const numOfPendingLimits = 5;
+    const funds = 100;
 
     const Messenger = await hre.ethers.getContractFactory("Messenger");
     const messenger = await Messenger.deploy(numOfPendingLimits, {
-      value: 100,
+      value: funds,
     } as Overrides);
-    //const messenger = await Messenger.deploy(numOfPendingLimits);
 
-    return { messenger, numOfPendingLimits, owner, otherAccount };
+    return { messenger, numOfPendingLimits, funds, owner, otherAccount };
   }
 
   describe("Deployment", function () {
@@ -42,16 +37,14 @@ describe("Messenger", function () {
 
   describe("Change limits", function () {
     it("Should revert with the right error if called by other account", async function () {
-      const { messenger, numOfPendingLimits, otherAccount } = await loadFixture(
-        deployContract
-      );
+      const { messenger, otherAccount } = await loadFixture(deployContract);
 
       await expect(
         messenger.connect(otherAccount).changeNumOfPendingLimits(5)
       ).to.be.revertedWith("You aren't the owner");
     });
 
-    it("Should set the right pending limits", async function () {
+    it("Should set the right pending limits after change", async function () {
       const { messenger, numOfPendingLimits } = await loadFixture(
         deployContract
       );
@@ -83,18 +76,25 @@ describe("Messenger", function () {
     //});
   });
 
-  describe("Post", function () {
-    it("Should set the right Message", async function () {
-      const { messenger, numOfPendingLimits, otherAccount } = await loadFixture(
-        deployContract
+  describe("accept", function () {
+    it("Should emit an event on accept", async function () {
+      const { messenger, otherAccount } = await loadFixture(deployContract);
+
+      await messenger.post("first message", otherAccount.address, { value: 1 });
+      await expect(messenger.connect(otherAccount).accept(0)).to.emit(
+        messenger,
+        "MessageConfirmed"
       );
+    });
+
+    it("Should revert with the right error if called in duplicate", async function () {
+      const { messenger, otherAccount } = await loadFixture(deployContract);
 
       await messenger.post("first message", otherAccount.address, { value: 1 });
       await messenger.connect(otherAccount).accept(0);
-      await expect(messenger.connect(otherAccount).accept(0)).to.emit(
-        messenger,
-        "MessageAccepted"
-      );
+      await expect(
+        messenger.connect(otherAccount).accept(0)
+      ).to.be.revertedWith("This message has already been confirmed");
     });
   });
 });

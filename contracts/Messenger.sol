@@ -10,7 +10,7 @@ contract Messenger is Ownable {
     uint256 public numOfPendingLimits;
 
     struct Message {
-        uint256 depositInWei;
+        uint256 deposit;
         uint256 timestamp;
         string text;
         bool isPending;
@@ -24,7 +24,7 @@ contract Messenger is Ownable {
     mapping(address => uint256) private numOfPendingAtAddress;
 
     event NewMessage(
-        uint256 depositInWei,
+        uint256 deposit,
         uint256 timestamp,
         string text,
         bool isPending,
@@ -32,8 +32,7 @@ contract Messenger is Ownable {
         address receiver
     );
 
-    event MessageAccepted(address receiver, uint256 index);
-    event MessageDenied(address receiver, uint256 index);
+    event MessageConfirmed(address receiver, uint256 index);
 
     constructor(uint256 _numOfPendingLimits) payable {
         console.log("Here is my first smart contract!");
@@ -85,42 +84,55 @@ contract Messenger is Ownable {
     function accept(uint256 _index) public {
         Message storage message = sefeAccessToMessage(msg.sender, _index);
 
-        // 署名者アドレスとメッセージの受取人アドレスが同じか確認します。
+        // 関数を呼び出したアドレスとメッセージの受取人アドレスが同じか確認します。
         require(
             msg.sender == message.receiver,
-            "The caller of the contract must be equal to the receiver of the message."
+            "The caller of the contract must be equal to the receiver of the message"
+        );
+
+        // メッセージが保留中か確認します。
+        require(
+            message.isPending == true,
+            "This message has already been confirmed"
         );
 
         // メッセージの受取人にavaxを送信します。
-        sendAvax(message.receiver, message.depositInWei);
+        sendAvax(message.receiver, message.deposit);
 
         // メッセージの保留状態を解除します。
         message.isPending = false;
 
-        // eventを投げます。
-        emit MessageAccepted(message.receiver, _index);
+        emit MessageConfirmed(message.receiver, _index);
     }
 
     // メッセージ受け取りを却下して, AVAXをメッセージ送信者へ返却します。
     function deny(uint256 _index) public payable {
         Message storage message = sefeAccessToMessage(msg.sender, _index);
 
+        // 関数を呼び出したアドレスとメッセージの受取人アドレスが同じか確認します。
         require(
             msg.sender == message.receiver,
-            "The caller of the contract must be equal to the receiver of the message."
+            "The caller of the contract must be equal to the receiver of the message"
+        );
+
+        // メッセージが保留中か確認します。
+        require(
+            message.isPending == true,
+            "This message has already been confirmed"
         );
 
         // メッセージの送信者にavaxを返却します。
-        sendAvax(message.sender, message.depositInWei);
+        sendAvax(message.sender, message.deposit);
 
+        // メッセージの保留状態を解除します。
         message.isPending = false;
 
-        emit MessageDenied(message.receiver, _index);
+        emit MessageConfirmed(message.receiver, _index);
     }
 
     function sendAvax(address payable _to, uint256 _amountInWei) private {
         (bool success, ) = (_to).call{value: _amountInWei}("");
-        require(success, "Failed to withdraw AVAX from contract.");
+        require(success, "Failed to withdraw AVAX from contract");
     }
 
     // indexをチェックした上でMessage[]にアクセスします。
