@@ -64,24 +64,37 @@ describe("Messenger", function () {
       ).to.emit(messenger, "NewMessage");
     });
 
-    //it("Should set the right Message", async function () {
-    //  const { messenger, numOfPendingLimits, otherAccount } = await loadFixture(
-    //    deployContract
-    //  );
+    it("Should set the right Message", async function () {
+      const { messenger, owner, otherAccount } = await loadFixture(
+        deployContract
+      );
+      const test_deposit = 1;
+      const test_text = "first message";
 
-    //  await messenger.post("first message", otherAccount.address, { value: 1 });
-    //  const message = await messenger.getOwnMessages();
-    //  console.log("====>", message);
-    //  expect(message[0].depositInWei).to.equal(1);
-    //});
+      await messenger.post(test_text, otherAccount.address, {
+        value: test_deposit,
+      });
+      const messages = await messenger.connect(otherAccount).getOwnMessages();
+      const message = messages[0];
+      expect(message.deposit).to.equal(test_deposit);
+      expect(message.text).to.equal(test_text);
+      expect(message.isPending).to.equal(true);
+      expect(message.sender).to.equal(owner.address);
+      expect(message.receiver).to.equal(otherAccount.address);
+    });
   });
 
   describe("accept", function () {
     it("Should emit an event on accept", async function () {
       const { messenger, otherAccount } = await loadFixture(deployContract);
+      const test_deposit = 1;
 
-      await messenger.post("first message", otherAccount.address, { value: 1 });
-      await expect(messenger.connect(otherAccount).accept(0)).to.emit(
+      await messenger.post("first message", otherAccount.address, {
+        value: test_deposit,
+      });
+
+      const first_index = 0;
+      await expect(messenger.connect(otherAccount).accept(first_index)).to.emit(
         messenger,
         "MessageConfirmed"
       );

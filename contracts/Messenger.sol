@@ -59,6 +59,8 @@ contract Messenger is Ownable {
             "The receiver has reached the number of pending limits"
         );
 
+        console.log("%s posts %s with %s", msg.sender, _text, msg.value);
+
         messagesAtAddress[_receiver].push(
             Message(
                 msg.value,
