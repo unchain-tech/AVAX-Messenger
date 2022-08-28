@@ -9,6 +9,7 @@ contract Messenger is Ownable {
     // ユーザが保留できるメッセージ数の上限を設定します。
     uint256 public numOfPendingLimits;
 
+    // メッセージ情報を定義します。
     struct Message {
         uint256 deposit;
         uint256 timestamp;
