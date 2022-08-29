@@ -1,14 +1,20 @@
 import Layout from "../../components/layout";
-import UseWallet from "../../components/useWallet";
+import WalletLayout from "../../components/walletLayout";
+import { useWallet } from "../../hooks/useWallet";
+
+// junさんのやつみたいにlibからcurrentaccount取ってくる
 
 export default function First() {
+  const { currentAccount } = useWallet();
+
   return (
     <Layout>
-      <UseWallet>
+      <WalletLayout>
         <div>
           <div>First Page !</div>
+          <div>wallet is {currentAccount}</div>
         </div>
-      </UseWallet>
+      </WalletLayout>
     </Layout>
   );
 }

@@ -2,13 +2,13 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import UseWallet from "../components/useWallet";
+import WalletLayout from "../components/walletLayout";
 import Layout from "../components/layout";
 
 const Home: NextPage = () => {
   return (
     <Layout home>
-      <UseWallet>
+      <WalletLayout>
         <div className={styles.container}>
           <Head>
             <title>Create Next App</title>
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
             </div>
           </main>
         </div>
-      </UseWallet>
+      </WalletLayout>
     </Layout>
   );
 };
