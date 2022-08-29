@@ -1,14 +1,14 @@
-import Link from "next/link";
+import Layout from "../../components/layout";
+import UseWallet from "../../components/useWallet";
 
 export default function First() {
   return (
-    <div>
-      <div>First Page !</div>
-      <div>
-        <Link href="/">
-          <a>← Back to home</a>
-        </Link>
-      </div>
-    </div>
+    <Layout>
+      <UseWallet>
+        <div>
+          <div>First Page !</div>
+        </div>
+      </UseWallet>
+    </Layout>
   );
 }

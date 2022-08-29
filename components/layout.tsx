@@ -1,49 +1,30 @@
 import Head from "next/head";
 import styles from "./layout.module.css";
-import { useEffect, useState } from "react";
-import LinkWallet from "./account";
+import Link from "next/link";
 
 export const siteTitle = "Welcome to the Messenger";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const [currentAccount, setCurrentAccount] = useState("");
-
-  const checkIfWalletIsConnected = async () => {
-    try {
-      const { ethereum } = window as any;
-      if (!ethereum) {
-        console.log("Make sure you have MetaMask!");
-        return;
-      } else {
-        console.log("We have the ethereum object", ethereum);
-      }
-      const accounts = await ethereum.request({ method: "eth_accounts" });
-      if (accounts.length !== 0) {
-        const account = accounts[0];
-        console.log("Found an authorized account:", account);
-        setCurrentAccount(account);
-      } else {
-        console.log("No authorized account found");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    checkIfWalletIsConnected();
-  }, []);
-
+export default function Layout({
+  children,
+  home,
+}: {
+  children: React.ReactNode;
+  home?: boolean;
+}) {
   return (
     <div className={styles.container}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="Messenger dApp" />
+        <meta name="og:title" content={siteTitle} />
       </Head>
-      {currentAccount ? (
-        <main>{children}</main>
-      ) : (
-        <LinkWallet setCurrentAccount={setCurrentAccount} />
+      <header className={styles.header}>{home && <h1>Welcome!</h1>}</header>
+      <main>{children}</main>
+      {!home && (
+        <div className={styles.backToHome}>
+          <Link href="/">
+            <a>← Back to home</a>
+          </Link>
+        </div>
       )}
     </div>
   );
