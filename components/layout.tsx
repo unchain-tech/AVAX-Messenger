@@ -1,18 +1,11 @@
 import Head from "next/head";
 import styles from "./layout.module.css";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import LinkWallet from "./account";
 
 export const siteTitle = "Welcome to the Messenger";
 
-export default function Layout({
-  children,
-  home,
-}: {
-  children: React.ReactNode;
-  home?: boolean;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [currentAccount, setCurrentAccount] = useState("");
 
   const checkIfWalletIsConnected = async () => {
@@ -48,20 +41,9 @@ export default function Layout({
         <meta name="description" content="Messenger dApp" />
       </Head>
       {currentAccount ? (
-        <>
-          <main>{children}</main>
-        </>
+        <main>{children}</main>
       ) : (
-        <>
-          <LinkWallet setCurrentAccount={setCurrentAccount} />
-        </>
-      )}
-      {!home && (
-        <div className={styles.backToHome}>
-          <Link href="/">
-            <a>← Back to home</a>
-          </Link>
-        </div>
+        <LinkWallet setCurrentAccount={setCurrentAccount} />
       )}
     </div>
   );

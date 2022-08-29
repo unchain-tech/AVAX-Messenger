@@ -1,9 +1,14 @@
-import Layout from "../../components/layout";
+import Link from "next/link";
 
 export default function First() {
   return (
-    <Layout>
+    <div>
       <div>First Page !</div>
-    </Layout>
+      <div>
+        <Link href="/">
+          <a>← Back to home</a>
+        </Link>
+      </div>
+    </div>
   );
 }
