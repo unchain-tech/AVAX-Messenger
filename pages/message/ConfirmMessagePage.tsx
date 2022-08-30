@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Layout from "../../components/Layout";
+import PageLayout from "../../components/PageLayout";
 import UseWalletLayout from "../../components/UseWalletLayout";
 import { useWallet } from "../../hooks/useWallet";
 import { BigNumber, ethers } from "ethers";
@@ -83,7 +83,7 @@ export default function ConfirmMessagePage() {
   }, []);
 
   return (
-    <Layout>
+    <PageLayout>
       <UseWalletLayout
         currentAccount={currentAccount}
         connectWallet={connectWallet}
@@ -108,6 +108,6 @@ export default function ConfirmMessagePage() {
             })}
         </div>
       </UseWalletLayout>
-    </Layout>
+    </PageLayout>
   );
 }

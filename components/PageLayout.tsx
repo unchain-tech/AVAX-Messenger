@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const siteTitle = "Welcome to the Messenger";
 
-export default function Layout({
+export default function PageLayout({
   children,
   home,
 }: {

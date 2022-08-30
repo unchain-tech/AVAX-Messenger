@@ -3,13 +3,13 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import UseWalletLayout from "../components/UseWalletLayout";
-import Layout from "../components/Layout";
+import PageLayout from "../components/PageLayout";
 import { useWallet } from "../hooks/useWallet";
 
 const Home: NextPage = () => {
   const { currentAccount, connectWallet } = useWallet();
   return (
-    <Layout home>
+    <PageLayout home>
       <UseWalletLayout
         currentAccount={currentAccount}
         connectWallet={connectWallet}
@@ -38,7 +38,7 @@ const Home: NextPage = () => {
           </main>
         </div>
       </UseWalletLayout>
-    </Layout>
+    </PageLayout>
   );
 };
 
