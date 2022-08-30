@@ -5,6 +5,7 @@ import { useWallet } from "../../hooks/useWallet";
 import { ethers } from "ethers";
 import abi from "../../utils/Messenger.json";
 import TextBox from "../../components/TextBox";
+import SendMessageButton from "../../components/SendMessageButton";
 
 const contractAddress = "0xC3c90d7093712840c62ef806B1a026377A293286";
 const contractABI = abi.abi;
@@ -44,6 +45,7 @@ async function SendMessage({ text, receiver, token }: Props) {
 }
 
 //TODO: textarea以外も使う
+//TODO: useContract的なやつからminingや状態・変更関数をもらう
 
 export default function SendMessagePage() {
   const [textValue, setTextValue] = useState("");
@@ -60,7 +62,6 @@ export default function SendMessagePage() {
         <div>
           <div>send message !</div>
           <div>wallet is {currentAccount}</div>
-          {/* テキストボックス */}
           {currentAccount && (
             <div>
               <TextBox
@@ -75,22 +76,17 @@ export default function SendMessagePage() {
                 name="amount of avax to attach"
                 onChange={(e) => setTokenValue(e.target.value)}
               />
+              <SendMessageButton
+                name="send message"
+                onClick={() => {
+                  SendMessage({
+                    text: textValue,
+                    receiver: receiverAccountValue,
+                    token: parseInt(tokenValue, 10),
+                  });
+                }}
+              />
             </div>
-          )}
-          {/* sendボタンにsend関数を連動 */}
-          {currentAccount && (
-            <button
-              className="postButton"
-              onClick={() => {
-                SendMessage({
-                  text: textValue,
-                  receiver: receiverAccountValue,
-                  token: parseInt(tokenValue, 10),
-                });
-              }}
-            >
-              send
-            </button>
           )}
         </div>
       </UseWalletLayout>
