@@ -1,9 +1,10 @@
 import { useState } from "react";
-import Layout from "../../components/layout";
-import WalletLayout from "../../components/walletLayout";
+import Layout from "../../components/Layout";
+import WalletLayout from "../../components/WalletLayout";
 import { useWallet } from "../../hooks/useWallet";
 import { ethers } from "ethers";
 import abi from "../../utils/Messenger.json";
+import TextBox from "../../components/TextBox";
 
 const contractAddress = "0xC3c90d7093712840c62ef806B1a026377A293286";
 const contractABI = abi.abi;
@@ -53,44 +54,25 @@ export default function SendMessagePage() {
     <Layout>
       <WalletLayout>
         <div>
-          <div>First Page !</div>
+          <div>send message !</div>
           <div>wallet is {currentAccount}</div>
           {/* テキストボックス */}
           {currentAccount && (
-            <textarea
-              name="messageArea"
-              placeholder="type here"
-              id="content"
-              value={textValue}
-              onChange={(e) => setTextValue(e.target.value)}
-            />
+            <div>
+              <TextBox
+                name="text"
+                onChange={(e) => setTextValue(e.target.value)}
+              />
+              <TextBox
+                name="account address to send"
+                onChange={(e) => setReceiverAccountValue(e.target.value)}
+              />
+              <TextBox
+                name="amount of avax to attach"
+                onChange={(e) => setTokenValue(e.target.value)}
+              />
+            </div>
           )}
-          <p>{textValue}</p>
-
-          {/* 受信者ボックス */}
-          {currentAccount && (
-            <textarea
-              name="messageArea"
-              placeholder="type here"
-              id="content"
-              value={receiverAccountValue}
-              onChange={(e) => setReceiverAccountValue(e.target.value)}
-            />
-          )}
-          <p>{receiverAccountValue}</p>
-
-          {/* トークンボックス */}
-          {currentAccount && (
-            <textarea
-              name="messageArea"
-              placeholder="type here"
-              id="content"
-              value={tokenValue}
-              onChange={(e) => setTokenValue(e.target.value)}
-            />
-          )}
-          <p>{parseInt(tokenValue, 10)}</p>
-
           {/* sendボタンにsend関数を連動 */}
           {currentAccount && (
             <button

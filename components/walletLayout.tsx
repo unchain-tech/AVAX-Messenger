@@ -1,6 +1,6 @@
 import Head from "next/head";
 import styles from "./layout.module.css";
-import ConnectWalletButton from "./connectWalletButton";
+import ConnectWalletButton from "./ConnectWalletButton";
 import { useWallet } from "../hooks/useWallet";
 
 export const siteTitle = "Welcome to the Messenger";

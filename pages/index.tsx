@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import WalletLayout from "../components/walletLayout";
-import Layout from "../components/layout";
+import WalletLayout from "../components/WalletLayout";
+import Layout from "../components/Layout";
 
 const Home: NextPage = () => {
   return (
@@ -21,7 +21,13 @@ const Home: NextPage = () => {
 
             <div className={styles.grid}>
               <Link href="/message/SendMessagePage" className={styles.card}>
-                <h2>first page &rarr;</h2>
+                <h2>send message &rarr;</h2>
+              </Link>
+            </div>
+
+            <div className={styles.grid}>
+              <Link href="/message/ConfirmMessagePage" className={styles.card}>
+                <h2>confirm message &rarr;</h2>
               </Link>
             </div>
           </main>
