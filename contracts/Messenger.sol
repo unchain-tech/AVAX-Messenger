@@ -138,7 +138,7 @@ contract Messenger is Ownable {
         require(success, "Failed to withdraw AVAX from contract");
     }
 
-    // indexをチェックした上でMessage[]にアクセスします。
+    // indexの範囲をチェックした上でMessage[]にアクセスします。
     function sefeAccessToMessage(address _receiver, uint256 _index)
         private
         view
