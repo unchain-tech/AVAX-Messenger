@@ -2,9 +2,7 @@ import Layout from "../../components/layout";
 import WalletLayout from "../../components/walletLayout";
 import { useWallet } from "../../hooks/useWallet";
 
-// junさんのやつみたいにlibからcurrentaccount取ってくる
-
-export default function First() {
+export default function SendMessage() {
   const { currentAccount } = useWallet();
 
   return (

@@ -14,10 +14,6 @@ export default function WalletLayout({
 
   return (
     <div className={styles.container}>
-      <Head>
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="Messenger dApp" />
-      </Head>
       {currentAccount ? (
         <main>{children}</main>
       ) : (
