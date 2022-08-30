@@ -2,56 +2,19 @@ import { useState } from "react";
 import PageLayout from "../../components/PageLayout";
 import UseWalletLayout from "../../components/UseWalletLayout";
 import { useWallet } from "../../hooks/useWallet";
-import { ethers } from "ethers";
-import abi from "../../utils/Messenger.json";
 import TextBox from "../../components/TextBox";
 import SendMessageButton from "../../components/SendMessageButton";
-
-const contractAddress = "0xC3c90d7093712840c62ef806B1a026377A293286";
-const contractABI = abi.abi;
-
-type Props = {
-  text: string;
-  receiver: string;
-  token: number; // numberでいいのかわからん！
-};
-
-async function SendMessage({ text, receiver, token }: Props) {
-  alert("send");
-  try {
-    const { ethereum } = window as any;
-    if (ethereum) {
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const signer = provider.getSigner();
-      const MessengerContract = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        signer
-      );
-      // MAX_ETH = gas_fee * gasLimit
-      const postTxn = await MessengerContract.post(text, receiver, {
-        gasLimit: 300000,
-        value: token, // check in wei
-      });
-      console.log("Mining...", postTxn.hash);
-      await postTxn.wait();
-      console.log("Mined -- ", postTxn.hash);
-    } else {
-      console.log("Ethereum object doesn't exist!");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
+import { useMessengerContract } from "../../hooks/useMessengerContract";
 
 //TODO: textarea以外も使う
-//TODO: useContract的なやつからminingや状態・変更関数をもらう
+//TODO: eventを受け付ける
 
 export default function SendMessagePage() {
   const [textValue, setTextValue] = useState("");
   const [tokenValue, setTokenValue] = useState("");
   const [receiverAccountValue, setReceiverAccountValue] = useState("");
   const { currentAccount, connectWallet } = useWallet();
+  const { mining, sendMessage } = useMessengerContract();
 
   return (
     <PageLayout>
@@ -79,7 +42,7 @@ export default function SendMessagePage() {
               <SendMessageButton
                 name="send message"
                 onClick={() => {
-                  SendMessage({
+                  sendMessage({
                     text: textValue,
                     receiver: receiverAccountValue,
                     token: parseInt(tokenValue, 10),
