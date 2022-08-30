@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
-import WalletLayout from "../../components/WalletLayout";
+import UseWalletLayout from "../../components/UseWalletLayout";
 import { useWallet } from "../../hooks/useWallet";
 import { BigNumber, ethers } from "ethers";
 import abi from "../../utils/Messenger.json";
@@ -72,7 +72,7 @@ type Message = {
 
 export default function ConfirmMessagePage() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const { currentAccount } = useWallet();
+  const { currentAccount, connectWallet } = useWallet();
 
   useEffect(() => {
     GetMessages({
@@ -84,7 +84,10 @@ export default function ConfirmMessagePage() {
 
   return (
     <Layout>
-      <WalletLayout>
+      <UseWalletLayout
+        currentAccount={currentAccount}
+        connectWallet={connectWallet}
+      >
         <div>
           <div>Confirm Message Page !</div>
           <div>wallet is {currentAccount}</div>
@@ -104,7 +107,7 @@ export default function ConfirmMessagePage() {
               );
             })}
         </div>
-      </WalletLayout>
+      </UseWalletLayout>
     </Layout>
   );
 }

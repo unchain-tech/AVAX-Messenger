@@ -1,10 +1,8 @@
-type connectWalletFunc = () => void;
+type Props = {
+  connectWallet: () => void;
+};
 
-export default function ConnectWalletButton({
-  connectWallet,
-}: {
-  connectWallet: connectWalletFunc;
-}) {
+export default function ConnectWalletButton({ connectWallet }: Props) {
   return (
     <div>
       <button className="waveButton" onClick={connectWallet}>

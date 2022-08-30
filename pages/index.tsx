@@ -2,13 +2,18 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import WalletLayout from "../components/WalletLayout";
+import UseWalletLayout from "../components/UseWalletLayout";
 import Layout from "../components/Layout";
+import { useWallet } from "../hooks/useWallet";
 
 const Home: NextPage = () => {
+  const { currentAccount, connectWallet } = useWallet();
   return (
     <Layout home>
-      <WalletLayout>
+      <UseWalletLayout
+        currentAccount={currentAccount}
+        connectWallet={connectWallet}
+      >
         <div className={styles.container}>
           <Head>
             <title>Create Next App</title>
@@ -32,7 +37,7 @@ const Home: NextPage = () => {
             </div>
           </main>
         </div>
-      </WalletLayout>
+      </UseWalletLayout>
     </Layout>
   );
 };

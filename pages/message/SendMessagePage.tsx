@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Layout from "../../components/Layout";
-import WalletLayout from "../../components/WalletLayout";
+import UseWalletLayout from "../../components/UseWalletLayout";
 import { useWallet } from "../../hooks/useWallet";
 import { ethers } from "ethers";
 import abi from "../../utils/Messenger.json";
@@ -27,7 +27,6 @@ async function SendMessage({ text, receiver, token }: Props) {
         contractABI,
         signer
       );
-      // 予期せぬ処理ブロックなどでガス量が無理にならないための上限を設定
       // MAX_ETH = gas_fee * gasLimit
       const postTxn = await MessengerContract.post(text, receiver, {
         gasLimit: 300000,
@@ -44,15 +43,20 @@ async function SendMessage({ text, receiver, token }: Props) {
   }
 }
 
+//TODO: textarea以外も使う
+
 export default function SendMessagePage() {
   const [textValue, setTextValue] = useState("");
   const [tokenValue, setTokenValue] = useState("");
   const [receiverAccountValue, setReceiverAccountValue] = useState("");
-  const { currentAccount } = useWallet();
+  const { currentAccount, connectWallet } = useWallet();
 
   return (
     <Layout>
-      <WalletLayout>
+      <UseWalletLayout
+        currentAccount={currentAccount}
+        connectWallet={connectWallet}
+      >
         <div>
           <div>send message !</div>
           <div>wallet is {currentAccount}</div>
@@ -89,7 +93,7 @@ export default function SendMessagePage() {
             </button>
           )}
         </div>
-      </WalletLayout>
+      </UseWalletLayout>
     </Layout>
   );
 }
