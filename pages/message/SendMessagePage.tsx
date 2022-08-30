@@ -65,7 +65,8 @@ export default function SendMessagePage() {
               onChange={(e) => setTextValue(e.target.value)}
             />
           )}
-          {textValue}
+          <p>{textValue}</p>
+
           {/* 受信者ボックス */}
           {currentAccount && (
             <textarea
@@ -76,7 +77,8 @@ export default function SendMessagePage() {
               onChange={(e) => setReceiverAccountValue(e.target.value)}
             />
           )}
-          {receiverAccountValue}
+          <p>{receiverAccountValue}</p>
+
           {/* トークンボックス */}
           {currentAccount && (
             <textarea
@@ -87,7 +89,8 @@ export default function SendMessagePage() {
               onChange={(e) => setTokenValue(e.target.value)}
             />
           )}
-          {parseInt(tokenValue, 10)}
+          <p>{parseInt(tokenValue, 10)}</p>
+
           {/* sendボタンにsend関数を連動 */}
           {currentAccount && (
             <button
