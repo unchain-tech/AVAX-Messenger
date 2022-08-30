@@ -20,7 +20,7 @@ const Home: NextPage = () => {
             <h1 className={styles.title}>Welcome to Messenger !</h1>
 
             <div className={styles.grid}>
-              <Link href="/message/SendMessage" className={styles.card}>
+              <Link href="/message/SendMessagePage" className={styles.card}>
                 <h2>first page &rarr;</h2>
               </Link>
             </div>
