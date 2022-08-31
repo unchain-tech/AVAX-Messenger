@@ -6,16 +6,22 @@ import { Message } from "../pages/message/ConfirmMessagePage";
 const contractAddress = "0xC3c90d7093712840c62ef806B1a026377A293286";
 const contractABI = abi.abi;
 
-type sendMessengerProps = {
+type sendMessageProps = {
   text: string;
   receiver: string;
   token: number; //TODO: numberでいいのかわからん！
 };
 
+type confirmMessageProps = {
+  index: number;
+};
+
 type ReturnUseMessengerContract = {
   mining: boolean;
-  sendMessage: (props: sendMessengerProps) => void;
   ownMessages: Message[];
+  sendMessage: (props: sendMessageProps) => void;
+  acceptMessage: (props: confirmMessageProps) => void;
+  denyMessage: (props: confirmMessageProps) => void;
 };
 
 type Props = {
@@ -59,27 +65,6 @@ export const useMessengerContract = ({
     }
   }
 
-  async function sendMessage({ text, receiver, token }: sendMessengerProps) {
-    try {
-      if (messengerContract) {
-        // MAX_ETH = gas_fee * gasLimit
-        const postTxn = await messengerContract.post(text, receiver, {
-          gasLimit: 300000,
-          value: token, //TODO: check in wei
-        });
-        console.log("Mining...", postTxn.hash);
-        setMining(true);
-        await postTxn.wait();
-        console.log("Mined -- ", postTxn.hash);
-        setMining(false);
-      } else {
-        console.log("messenger contract doesn't exist!");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async function getOwnMessages() {
     alert("confirm");
     try {
@@ -108,10 +93,130 @@ export const useMessengerContract = ({
     }
   }
 
+  async function sendMessage({ text, receiver, token }: sendMessageProps) {
+    try {
+      if (messengerContract) {
+        // MAX_ETH = gas_fee * gasLimit
+        const postTxn = await messengerContract.post(text, receiver, {
+          gasLimit: 300000,
+          value: token, //TODO: check in wei
+        });
+        console.log("Mining...", postTxn.hash);
+        setMining(true);
+        await postTxn.wait();
+        console.log("Mined -- ", postTxn.hash);
+        setMining(false);
+      } else {
+        console.log("messenger contract doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function acceptMessage({ index }: confirmMessageProps) {
+    try {
+      if (messengerContract) {
+        // MAX_ETH = gas_fee * gasLimit
+        const postTxn = await messengerContract.accept(index, {
+          gasLimit: 300000,
+        });
+        console.log("Mining...", postTxn.hash);
+        setMining(true);
+        await postTxn.wait();
+        console.log("Mined -- ", postTxn.hash);
+        setMining(false);
+      } else {
+        console.log("messenger contract doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function denyMessage({ index }: confirmMessageProps) {
+    try {
+      if (messengerContract) {
+        // MAX_ETH = gas_fee * gasLimit
+        const postTxn = await messengerContract.deny(index, {
+          gasLimit: 300000,
+        });
+        console.log("Mining...", postTxn.hash);
+        setMining(true);
+        await postTxn.wait();
+        console.log("Mined -- ", postTxn.hash);
+        setMining(false);
+      } else {
+        console.log("messenger contract doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getMessageContract();
     getOwnMessages();
   }, [currentAccount]);
 
-  return { mining, sendMessage, ownMessages };
+  useEffect(() => {
+    // NewMessageのイベントリスナ
+    const onNewMessage = (
+      deposit: any,
+      timestamp: any,
+      text: any,
+      isPending: any,
+      sender: any,
+      receiver: any
+    ) => {
+      console.log(
+        "NewMessage",
+        deposit,
+        timestamp,
+        text,
+        isPending,
+        sender,
+        receiver
+      );
+      if ((receiver as string).toLocaleLowerCase() === currentAccount) {
+        setOwnMessages((prevState) => [
+          ...prevState,
+          {
+            deposit: deposit.toString(),
+            timestamp: new Date((timestamp as any) * 1000), //TODO: any
+            text: text,
+            isPending: isPending,
+            sender: sender.toString(),
+            receiver: receiver.toString(),
+          },
+        ]);
+      }
+    };
+
+    const onMessageConfirmed = (receiver: any, index: any) => {
+      console.log("MessageConfirmed", receiver, index.toNumber());
+      if (receiver.toLocaleLowerCase() === currentAccount) {
+        setOwnMessages((prevState) => {
+          prevState[index.toNumber()].isPending = false;
+          return [...prevState];
+        });
+      }
+    };
+
+    /* NewMessageイベントがコントラクトから発信されたときに、情報を受け取ります */
+    if (messengerContract) {
+      messengerContract.on("NewMessage", onNewMessage);
+      messengerContract.on("MessageConfirmed", onMessageConfirmed);
+    }
+
+    /*メモリリークを防ぐために、NewMessageのイベントを解除します*/
+    return () => {
+      if (messengerContract) {
+        messengerContract.off("NewMessage", onNewMessage);
+        messengerContract.off("MessageConfirmed", onMessageConfirmed);
+      }
+    };
+  }, [messengerContract]);
+
+  return { mining, ownMessages, sendMessage, acceptMessage, denyMessage };
 };
