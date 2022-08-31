@@ -159,5 +159,64 @@ export const useMessengerContract = ({
     getOwnMessages();
   }, [currentAccount]);
 
+  useEffect(() => {
+    // NewMessageのイベントリスナ
+    const onNewMessage = (
+      deposit: any,
+      timestamp: any,
+      text: any,
+      isPending: any,
+      sender: any,
+      receiver: any
+    ) => {
+      console.log(
+        "NewMessage",
+        deposit,
+        timestamp,
+        text,
+        isPending,
+        sender,
+        receiver
+      );
+      if ((receiver as string).toLocaleLowerCase() === currentAccount) {
+        setOwnMessages((prevState) => [
+          ...prevState,
+          {
+            deposit: deposit.toString(),
+            timestamp: new Date((timestamp as any) * 1000), //TODO: any
+            text: text,
+            isPending: isPending,
+            sender: sender.toString(),
+            receiver: receiver.toString(),
+          },
+        ]);
+      }
+    };
+
+    const onMessageConfirmed = (receiver: any, index: any) => {
+      console.log("MessageConfirmed", receiver, index.toNumber());
+      if (receiver.toLocaleLowerCase() === currentAccount) {
+        setOwnMessages((prevState) => {
+          prevState[index.toNumber()].isPending = false;
+          return [...prevState];
+        });
+      }
+    };
+
+    /* NewMessageイベントがコントラクトから発信されたときに、情報を受け取ります */
+    if (messengerContract) {
+      messengerContract.on("NewMessage", onNewMessage);
+      messengerContract.on("MessageConfirmed", onMessageConfirmed);
+    }
+
+    /*メモリリークを防ぐために、NewMessageのイベントを解除します*/
+    return () => {
+      if (messengerContract) {
+        messengerContract.off("NewMessage", onNewMessage);
+        messengerContract.off("MessageConfirmed", onMessageConfirmed);
+      }
+    };
+  }, [messengerContract]);
+
   return { mining, ownMessages, sendMessage, acceptMessage, denyMessage };
 };
