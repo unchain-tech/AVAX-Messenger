@@ -18,7 +18,7 @@ export type Message = {
 
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
-  const { ownMessages } = useMessengerContract({
+  const { ownMessages, acceptMessage, denyMessage } = useMessengerContract({
     currentAccount: currentAccount,
   });
 
@@ -36,7 +36,14 @@ export default function ConfirmMessagePage() {
             ownMessages.map((message, index) => {
               return (
                 <div key={index}>
-                  <MessageCard message={message} index={index} />
+                  <MessageCard
+                    message={message}
+                    index={index}
+                    onClickAccept={() => {
+                      acceptMessage({ index });
+                    }}
+                    onClickDeny={() => denyMessage({ index })}
+                  />
                 </div>
               );
             })}
