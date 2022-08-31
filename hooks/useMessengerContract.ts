@@ -19,7 +19,7 @@ type ReturnUseMessengerContract = {
 };
 
 type Props = {
-  setter: (messages: Message[]) => void;
+  currentAccount: string | undefined;
 };
 
 // TODO: numberでいいのか
@@ -32,7 +32,9 @@ type contractMessage = {
   receiver: BigNumber;
 };
 
-export const useMessengerContract = (): ReturnUseMessengerContract => {
+export const useMessengerContract = ({
+  currentAccount,
+}: Props): ReturnUseMessengerContract => {
   const [mining, setMining] = useState<boolean>(false);
   const [messengerContract, setMessengerContract] = useState<ethers.Contract>();
   const [ownMessages, setOwnMessages] = useState<Message[]>([]);
@@ -109,7 +111,7 @@ export const useMessengerContract = (): ReturnUseMessengerContract => {
   useEffect(() => {
     getMessageContract();
     getOwnMessages();
-  }, []);
+  }, [currentAccount]);
 
   return { mining, sendMessage, ownMessages };
 };

@@ -8,13 +8,16 @@ import { useMessengerContract } from "../../hooks/useMessengerContract";
 
 //TODO: textarea以外も使う
 //TODO: eventを受け付ける
+//TODO: miningを使う
 
 export default function SendMessagePage() {
   const [textValue, setTextValue] = useState("");
   const [tokenValue, setTokenValue] = useState("");
   const [receiverAccountValue, setReceiverAccountValue] = useState("");
   const { currentAccount, connectWallet } = useWallet();
-  const { mining, sendMessage } = useMessengerContract();
+  const { mining, sendMessage } = useMessengerContract({
+    currentAccount: currentAccount,
+  });
 
   return (
     <PageLayout>
