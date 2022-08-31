@@ -38,8 +38,7 @@ contract Messenger is Ownable {
     constructor(uint256 _numOfPendingLimits) payable {
         console.log("Here is my first smart contract!");
 
-        // 所有者をデプロイしたアドレスに設定します。
-        owner = msg.sender;
+        ownable();
 
         numOfPendingLimits = _numOfPendingLimits;
     }
@@ -56,9 +55,12 @@ contract Messenger is Ownable {
     {
         // メッセージ受取人の保留できるメッセージが上限に達しているかを確認します。
         require(
-            messagesAtAddress[_receiver].length < numOfPendingLimits,
+            numOfPendingAtAddress[_receiver] < numOfPendingLimits,
             "The receiver has reached the number of pending limits"
         );
+
+        // 保留中のメッセージの数をインクリメントします。
+        numOfPendingAtAddress[_receiver] += 1;
 
         console.log("%s posts [%s] with %s avax", msg.sender, _text, msg.value);
 
@@ -85,61 +87,53 @@ contract Messenger is Ownable {
 
     // メッセージ受け取りを承諾して, AVAXを受け取ります。
     function accept(uint256 _index) public {
-        Message storage message = sefeAccessToMessage(msg.sender, _index);
+        //指定インデックスのメッセージを確認します。
+        confirmMessage(_index);
 
-        // 関数を呼び出したアドレスとメッセージの受取人アドレスが同じか確認します。
-        require(
-            msg.sender == message.receiver,
-            "The caller of the contract must be equal to the receiver of the message"
-        );
-
-        // メッセージが保留中か確認します。
-        require(
-            message.isPending == true,
-            "This message has already been confirmed"
-        );
+        Message memory message = accessMessageSafety(msg.sender, _index);
 
         // メッセージの受取人にavaxを送信します。
         sendAvax(message.receiver, message.deposit);
-
-        // メッセージの保留状態を解除します。
-        message.isPending = false;
 
         emit MessageConfirmed(message.receiver, _index);
     }
 
     // メッセージ受け取りを却下して, AVAXをメッセージ送信者へ返却します。
     function deny(uint256 _index) public payable {
-        Message storage message = sefeAccessToMessage(msg.sender, _index);
+        confirmMessage(_index);
+
+        Message memory message = accessMessageSafety(msg.sender, _index);
+
+        // メッセージの送信者にavaxを返却します。
+        sendAvax(message.sender, message.deposit);
+
+        emit MessageConfirmed(message.receiver, _index);
+    }
+
+    function confirmMessage(uint256 _index) private {
+        Message storage message = accessMessageSafety(msg.sender, _index);
 
         // 関数を呼び出したアドレスとメッセージの受取人アドレスが同じか確認します。
         require(
             msg.sender == message.receiver,
-            "The caller of the contract must be equal to the receiver of the message"
+            "Only the receiver can confirmMessage the message"
         );
 
-        // メッセージが保留中か確認します。
+        // メッセージが保留中であることを確認します。
         require(
             message.isPending == true,
             "This message has already been confirmed"
         );
 
-        // メッセージの送信者にavaxを返却します。
-        sendAvax(message.sender, message.deposit);
-
         // メッセージの保留状態を解除します。
         message.isPending = false;
 
-        emit MessageConfirmed(message.receiver, _index);
-    }
-
-    function sendAvax(address payable _to, uint256 _amountInWei) private {
-        (bool success, ) = (_to).call{value: _amountInWei}("");
-        require(success, "Failed to withdraw AVAX from contract");
+        // ユーザの保留中のメッセージの数をデクリメントします。
+        numOfPendingAtAddress[message.receiver] -= 1;
     }
 
     // indexの範囲をチェックした上でMessage[]にアクセスします。
-    function sefeAccessToMessage(address _receiver, uint256 _index)
+    function accessMessageSafety(address _receiver, uint256 _index)
         private
         view
         returns (Message storage)
@@ -151,6 +145,11 @@ contract Messenger is Ownable {
         );
 
         return messagesAtAddress[_receiver][_index];
+    }
+
+    function sendAvax(address payable _to, uint256 _amountInWei) private {
+        (bool success, ) = (_to).call{value: _amountInWei}("");
+        require(success, "Failed to withdraw AVAX from contract");
     }
 
     function getOwnMessages() public view returns (Message[] memory) {

@@ -103,9 +103,12 @@ describe("Messenger", function () {
     it("Should revert with the right error if exceed number of pending limits", async function () {
       const { messenger, otherAccount } = await loadFixture(deployContract);
 
-      await messenger.changeNumOfPendingLimits(0);
+      await messenger.changeNumOfPendingLimits(1);
+      await messenger.post("dummy", otherAccount.address);
+      await messenger.connect(otherAccount).accept(0);
+      await messenger.post("first", otherAccount.address);
       await expect(
-        messenger.post("text", otherAccount.address)
+        messenger.post("second", otherAccount.address)
       ).to.be.revertedWith(
         "The receiver has reached the number of pending limits"
       );
