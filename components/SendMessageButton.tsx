@@ -1,0 +1,12 @@
+type Props = {
+  name: string;
+  onClick: () => void;
+};
+
+export default function SendMessageButton({ name, onClick }: Props) {
+  return (
+    <button className="postButton" onClick={onClick}>
+      {name}
+    </button>
+  );
+}
