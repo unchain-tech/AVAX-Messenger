@@ -12,6 +12,10 @@
   align-items: center;
 }
 
+.main h3 {
+  text-align: center;
+}
+
 .footer {
   display: flex;
   flex: 1;

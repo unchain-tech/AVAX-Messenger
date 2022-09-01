@@ -17,7 +17,6 @@ export default function BasicLayout({ children, home }: Props) {
         <link rel="icon" href="/favicon.ico" />
         <meta name="og:title" content={siteTitle} />
       </Head>
-      <header className={styles.header}>{home && <h1>Welcome!</h1>}</header>
       <main>{children}</main>
       {!home && (
         <div className={styles.backToHome}>
