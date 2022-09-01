@@ -1,8 +1,6 @@
 import Head from "next/head";
-import styles from "../../styles/BasicLayout.module.css";
+import styles from "./BasicLayout.module.css";
 import Link from "next/link";
-
-export const siteTitle = "Messenger";
 
 type Props = {
   children: React.ReactNode;
@@ -13,9 +11,11 @@ export default function BasicLayout({ children, home }: Props) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>{siteTitle}</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="og:title" content={siteTitle} />
+        <meta
+          name="description"
+          content="It is a message dapp that exchanges text and avax"
+        />
       </Head>
       <main>{children}</main>
       {!home && (

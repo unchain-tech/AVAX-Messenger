@@ -4,6 +4,7 @@ import RequireWalletLayout from "../../components/layout/RequireWalletLayout";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
 import { useEffect } from "react";
+import Head from "next/head";
 
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
@@ -22,6 +23,9 @@ export default function ConfirmMessagePage() {
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
+        <Head>
+          <title>Messenger</title>
+        </Head>
         {mining && <div>mining...</div>}
         {ownMessages.map((message, index) => {
           return (

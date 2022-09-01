@@ -13,7 +13,7 @@ export type Message = {
   sender: string;
   receiver: string;
 };
-
+//TODO: タイプファイルかanyで対応する
 type MessageFromContract = {
   depositInWei: BigNumber;
   timestamp: BigNumber;
