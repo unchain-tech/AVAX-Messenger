@@ -6,7 +6,7 @@ const contractAddress = "0x75e1cF6cD73659A3dd17a303DC5087EDC9Cc391c";
 const contractABI = abi.abi;
 
 export type Message = {
-  deposit: BigNumber;
+  depositInWei: BigNumber;
   timestamp: Date;
   text: string;
   isPending: boolean;
@@ -26,7 +26,7 @@ type MessageFromContract = {
 type SendMessageProps = {
   text: string;
   receiver: string;
-  token: BigNumber;
+  tokenInEther: string;
 };
 
 type ConfirmMessageProps = {
@@ -82,7 +82,7 @@ export const useMessengerContract = ({
       const messagesCleaned: Message[] = OwnMessages.map(
         (message: MessageFromContract) => {
           return {
-            deposit: message.deposit,
+            depositInWei: message.deposit,
             timestamp: new Date(message.timestamp.toNumber() * 1000),
             text: message.text,
             isPending: message.isPending,
@@ -97,18 +97,22 @@ export const useMessengerContract = ({
     }
   }
 
-  async function sendMessage({ text, receiver, token }: SendMessageProps) {
+  async function sendMessage({
+    text,
+    receiver,
+    tokenInEther,
+  }: SendMessageProps) {
     if (!messengerContract) return;
     try {
+      const tokenInWei = ethers.utils.parseEther(tokenInEther);
       console.log(
         "call post with receiver:[%s], token:[%s]",
         receiver,
-        token.toString()
+        tokenInWei.toString()
       );
-      // MAX_ETH = gas_fee * gasLimit
       const postTxn = await messengerContract.post(text, receiver, {
         gasLimit: 300000,
-        value: token, //TODO: check in wei
+        value: tokenInWei,
       });
       console.log("Mining...", postTxn.hash);
       setMining(true);
@@ -163,7 +167,7 @@ export const useMessengerContract = ({
   useEffect(() => {
     // NewMessageのイベントリスナ
     const onNewMessage = (
-      deposit: BigNumber,
+      depositInWei: BigNumber,
       timestamp: BigNumber,
       text: string,
       isPending: boolean,
@@ -175,7 +179,7 @@ export const useMessengerContract = ({
         setOwnMessages((prevState) => [
           ...prevState,
           {
-            deposit: deposit,
+            depositInWei: depositInWei,
             timestamp: new Date(timestamp.toNumber() * 1000),
             text: text,
             isPending: isPending,

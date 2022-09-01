@@ -49,7 +49,7 @@ export default function SendMessagePage() {
                   sendMessage({
                     text: textValue,
                     receiver: receiverAccountValue,
-                    token: BigNumber.from(tokenValue),
+                    tokenInEther: tokenValue,
                   });
                 }}
               />

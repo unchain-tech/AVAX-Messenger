@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { Message } from "../../hooks/useMessengerContract";
 
 type Props = {
@@ -13,10 +14,12 @@ export default function MessageCard({
   onClickAccept,
   onClickDeny,
 }: Props) {
+  const depositInEther = ethers.utils.formatEther(message.depositInWei);
+
   return (
     <div>
       <div>index: {index}</div>
-      <div>deposit: {message.deposit.toString()}</div>
+      <div>deposit: {depositInEther}</div>
       <div>timestamp: {message.timestamp.toDateString()}</div>
       <div>text: {message.text}</div>
       {message.isPending && (
