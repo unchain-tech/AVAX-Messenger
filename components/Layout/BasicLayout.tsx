@@ -1,5 +1,5 @@
 import Head from "next/head";
-import styles from "./BasicLayout.module.css";
+import styles from "../../styles/BasicLayout.module.css";
 import Link from "next/link";
 
 export const siteTitle = "Messenger";

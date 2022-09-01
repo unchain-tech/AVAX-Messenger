@@ -1,4 +1,3 @@
-import styles from "./BasicLayout.module.css";
 import ConnectWalletButton from "../button/ConnectWalletButton";
 
 type Props = {
@@ -13,7 +12,7 @@ export default function RequireWalletLayout({
   connectWallet,
 }: Props) {
   return (
-    <div className={styles.container}>
+    <div>
       {currentAccount ? (
         <main>{children}</main>
       ) : (
