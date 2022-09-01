@@ -74,95 +74,83 @@ export const useMessengerContract = ({
   }
 
   async function getOwnMessages() {
+    if (!messengerContract) return;
     try {
-      if (messengerContract) {
-        const OwnMessages = await messengerContract.getOwnMessages({
-          gasLimit: 300000,
-        });
-        const messagesCleaned: Message[] = OwnMessages.map(
-          (message: MessageFromContract) => {
-            return {
-              deposit: message.deposit,
-              timestamp: new Date(message.timestamp.toNumber() * 1000),
-              text: message.text,
-              isPending: message.isPending,
-              sender: message.sender.toString(),
-              receiver: message.receiver.toString(),
-            };
-          }
-        );
-        setOwnMessages(messagesCleaned);
-      } else {
-        console.log("messenger contract doesn't exist!");
-      }
+      const OwnMessages = await messengerContract.getOwnMessages({
+        gasLimit: 300000,
+      });
+      const messagesCleaned: Message[] = OwnMessages.map(
+        (message: MessageFromContract) => {
+          return {
+            deposit: message.deposit,
+            timestamp: new Date(message.timestamp.toNumber() * 1000),
+            text: message.text,
+            isPending: message.isPending,
+            sender: message.sender.toString(),
+            receiver: message.receiver.toString(),
+          };
+        }
+      );
+      setOwnMessages(messagesCleaned);
     } catch (error) {
       console.log(error);
     }
   }
 
   async function sendMessage({ text, receiver, token }: SendMessageProps) {
+    if (!messengerContract) return;
     try {
-      if (messengerContract) {
-        console.log(
-          "call post with receiver:[%s], token:[%s]",
-          receiver,
-          token.toString()
-        );
-        // MAX_ETH = gas_fee * gasLimit
-        const postTxn = await messengerContract.post(text, receiver, {
-          gasLimit: 300000,
-          value: token, //TODO: check in wei
-        });
-        console.log("Mining...", postTxn.hash);
-        setMining(true);
-        await postTxn.wait();
-        console.log("Mined -- ", postTxn.hash);
-        setMining(false);
-      } else {
-        console.log("messenger contract doesn't exist!");
-      }
+      console.log(
+        "call post with receiver:[%s], token:[%s]",
+        receiver,
+        token.toString()
+      );
+      // MAX_ETH = gas_fee * gasLimit
+      const postTxn = await messengerContract.post(text, receiver, {
+        gasLimit: 300000,
+        value: token, //TODO: check in wei
+      });
+      console.log("Mining...", postTxn.hash);
+      setMining(true);
+      await postTxn.wait();
+      console.log("Mined -- ", postTxn.hash);
+      setMining(false);
     } catch (error) {
       console.log(error);
     }
   }
 
   async function acceptMessage({ index }: ConfirmMessageProps) {
+    if (!messengerContract) return;
     try {
-      if (messengerContract) {
-        console.log("call accept with index [%d]", index);
-        // MAX_ETH = gas_fee * gasLimit
-        const postTxn = await messengerContract.accept(index, {
-          gasLimit: 300000,
-        });
-        console.log("Mining...", postTxn.hash);
-        setMining(true);
-        await postTxn.wait();
-        console.log("Mined -- ", postTxn.hash);
-        setMining(false);
-      } else {
-        console.log("messenger contract doesn't exist!");
-      }
+      console.log("call accept with index [%d]", index);
+      // MAX_ETH = gas_fee * gasLimit
+      const postTxn = await messengerContract.accept(index, {
+        gasLimit: 300000,
+      });
+      console.log("Mining...", postTxn.hash);
+      setMining(true);
+      await postTxn.wait();
+      console.log("Mined -- ", postTxn.hash);
+      setMining(false);
     } catch (error) {
       console.log(error);
     }
   }
 
   async function denyMessage({ index }: ConfirmMessageProps) {
+    if (!messengerContract) return;
     try {
-      if (messengerContract) {
-        console.log("call deny with index [%d]", index);
-        // MAX_ETH = gas_fee * gasLimit
-        const postTxn = await messengerContract.deny(index, {
-          gasLimit: 300000,
-        });
-        console.log("Mining...", postTxn.hash);
-        setMining(true);
-        await postTxn.wait();
-        console.log("Mined -- ", postTxn.hash);
-        setMining(false);
-      } else {
-        console.log("messenger contract doesn't exist!");
-      }
+      console.log("call deny with index [%d]", index);
+      // MAX_ETH = gas_fee * gasLimit
+      const postTxn = await messengerContract.deny(index, {
+        gasLimit: 300000,
+      });
+      console.log("Mining...", postTxn.hash);
+      setMining(true);
+      await postTxn.wait();
+      console.log("Mined -- ", postTxn.hash);
+      setMining(false);
     } catch (error) {
       console.log(error);
     }
@@ -175,28 +163,20 @@ export const useMessengerContract = ({
   useEffect(() => {
     // NewMessageのイベントリスナ
     const onNewMessage = (
-      deposit: any,
-      timestamp: any,
-      text: any,
-      isPending: any,
-      sender: any,
-      receiver: any
+      deposit: BigNumber,
+      timestamp: BigNumber,
+      text: string,
+      isPending: boolean,
+      sender: BigNumber,
+      receiver: BigNumber
     ) => {
-      console.log(
-        "NewMessage",
-        deposit,
-        timestamp,
-        text,
-        isPending,
-        sender,
-        receiver
-      );
-      if ((receiver as string).toLocaleLowerCase() === currentAccount) {
+      console.log("NewMessage");
+      if (receiver.toString().toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => [
           ...prevState,
           {
-            deposit: deposit.toString(),
-            timestamp: new Date((timestamp as any) * 1000), //TODO: any
+            deposit: deposit,
+            timestamp: new Date(timestamp.toNumber() * 1000),
             text: text,
             isPending: isPending,
             sender: sender.toString(),
@@ -206,9 +186,9 @@ export const useMessengerContract = ({
       }
     };
 
-    const onMessageConfirmed = (receiver: any, index: any) => {
+    const onMessageConfirmed = (receiver: BigNumber, index: BigNumber) => {
       console.log("MessageConfirmed", receiver, index.toNumber());
-      if (receiver.toLocaleLowerCase() === currentAccount) {
+      if (receiver.toString().toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => {
           prevState[index.toNumber()].isPending = false;
           return [...prevState];
@@ -216,13 +196,13 @@ export const useMessengerContract = ({
       }
     };
 
-    /* NewMessageイベントがコントラクトから発信されたときに、情報を受け取ります */
+    /* イベントリスナーの登録をします */
     if (messengerContract) {
       messengerContract.on("NewMessage", onNewMessage);
       messengerContract.on("MessageConfirmed", onMessageConfirmed);
     }
 
-    /*メモリリークを防ぐために、NewMessageのイベントを解除します*/
+    /* イベントリスナーの登録を解除します */
     return () => {
       if (messengerContract) {
         messengerContract.off("NewMessage", onNewMessage);

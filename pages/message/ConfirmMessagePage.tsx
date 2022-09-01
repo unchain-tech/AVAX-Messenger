@@ -3,7 +3,6 @@ import BasicLayout from "../../components/layout/BasicLayout";
 import RequireWalletLayout from "../../components/layout/RequireWalletLayout";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
-import HandleTransactionLayout from "../../components/layout/HandleTransactionLayout";
 import { useEffect } from "react";
 
 export default function ConfirmMessagePage() {
@@ -26,22 +25,21 @@ export default function ConfirmMessagePage() {
         <div>
           <div>Confirm Message Page !</div>
           <div>wallet is {currentAccount}</div>
-          <HandleTransactionLayout mining={mining}>
-            {ownMessages.map((message, index) => {
-              return (
-                <div key={index}>
-                  <MessageCard
-                    message={message}
-                    index={index}
-                    onClickAccept={() => {
-                      acceptMessage({ index });
-                    }}
-                    onClickDeny={() => denyMessage({ index })}
-                  />
-                </div>
-              );
-            })}
-          </HandleTransactionLayout>
+          {mining && <div>mining...</div>}
+          {ownMessages.map((message, index) => {
+            return (
+              <div key={index}>
+                <MessageCard
+                  message={message}
+                  index={index}
+                  onClickAccept={() => {
+                    acceptMessage({ index });
+                  }}
+                  onClickDeny={() => denyMessage({ index })}
+                />
+              </div>
+            );
+          })}
         </div>
       </RequireWalletLayout>
     </BasicLayout>
