@@ -5,7 +5,7 @@ type Props = {
 
 export default function SendMessageButton({ name, onClick }: Props) {
   return (
-    <button className="postButton" onClick={onClick}>
+    <button className="SendMessageButton" onClick={onClick}>
       {name}
     </button>
   );

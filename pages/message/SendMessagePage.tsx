@@ -3,12 +3,10 @@ import BasicLayout from "../../components/Layout/BasicLayout";
 import RequireWalletLayout from "../../components/Layout/RequireWalletLayout";
 import { useWallet } from "../../hooks/useWallet";
 import TextBox from "../../components/TextBox";
+import TextLine from "../../components/TextLine";
+import NumberLine from "../../components/NumberLine";
 import SendMessageButton from "../../components/SendMessageButton";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
-
-//TODO: textarea以外も使う
-//TODO: eventを受け付ける
-//TODO: miningを使う
 
 export default function SendMessagePage() {
   const [textValue, setTextValue] = useState("");
@@ -28,17 +26,19 @@ export default function SendMessagePage() {
         <div>
           <div>send message !</div>
           <div>wallet is {currentAccount}</div>
-          {currentAccount && (
+          {mining ? (
+            <div>mining...</div>
+          ) : (
             <div>
               <TextBox
                 name="text"
                 onChange={(e) => setTextValue(e.target.value)}
               />
-              <TextBox
+              <TextLine
                 name="account address to send"
                 onChange={(e) => setReceiverAccountValue(e.target.value)}
               />
-              <TextBox
+              <NumberLine
                 name="amount of avax to attach"
                 onChange={(e) => setTokenValue(e.target.value)}
               />
