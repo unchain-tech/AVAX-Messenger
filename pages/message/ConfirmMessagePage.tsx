@@ -4,13 +4,18 @@ import RequireWalletLayout from "../../components/Layout/RequireWalletLayout";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
 import HandleTransactionLayout from "../../components/Layout/HandleTransactionLayout";
+import { useEffect } from "react";
 
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
-  const { ownMessages, mining, acceptMessage, denyMessage } =
+  const { ownMessages, mining, getOwnMessages, acceptMessage, denyMessage } =
     useMessengerContract({
       currentAccount: currentAccount,
     });
+
+  useEffect(() => {
+    getOwnMessages();
+  }, [currentAccount]);
 
   return (
     <BasicLayout>

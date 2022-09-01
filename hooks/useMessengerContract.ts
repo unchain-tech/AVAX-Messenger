@@ -36,6 +36,7 @@ type ConfirmMessageProps = {
 type ReturnUseMessengerContract = {
   mining: boolean;
   ownMessages: Message[];
+  getOwnMessages: () => void;
   sendMessage: (props: SendMessageProps) => void;
   acceptMessage: (props: ConfirmMessageProps) => void;
   denyMessage: (props: ConfirmMessageProps) => void;
@@ -45,8 +46,6 @@ type Props = {
   currentAccount: string | undefined;
 };
 
-// まずgetOwnMessagesは毎度呼ばなくてもいい
-// usecallbackを使うか？
 export const useMessengerContract = ({
   currentAccount,
 }: Props): ReturnUseMessengerContract => {
@@ -171,7 +170,6 @@ export const useMessengerContract = ({
 
   useEffect(() => {
     getMessengerContract();
-    getOwnMessages();
   }, [currentAccount]);
 
   useEffect(() => {
@@ -233,5 +231,12 @@ export const useMessengerContract = ({
     };
   }, [messengerContract]);
 
-  return { mining, ownMessages, sendMessage, acceptMessage, denyMessage };
+  return {
+    mining,
+    ownMessages,
+    getOwnMessages,
+    sendMessage,
+    acceptMessage,
+    denyMessage,
+  };
 };
