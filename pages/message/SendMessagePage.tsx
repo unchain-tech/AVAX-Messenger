@@ -1,14 +1,14 @@
 import { useState } from "react";
-import BasicLayout from "../../components/Layout/BasicLayout";
-import RequireWalletLayout from "../../components/Layout/RequireWalletLayout";
+import BasicLayout from "../../components/layout/BasicLayout";
+import RequireWalletLayout from "../../components/layout/RequireWalletLayout";
 import { useWallet } from "../../hooks/useWallet";
-import TextBox from "../../components/TextBox";
-import TextLine from "../../components/TextLine";
-import NumberLine from "../../components/NumberLine";
-import SendMessageButton from "../../components/SendMessageButton";
+import TextBox from "../../components/input/TextBox";
+import TextLine from "../../components/input/TextLine";
+import NumberLine from "../../components/input/NumberLine";
+import SendMessageButton from "../../components/button/SendMessageButton";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { BigNumber } from "ethers";
-import HandleTransactionLayout from "../../components/Layout/HandleTransactionLayout";
+import HandleTransactionLayout from "../../components/layout/HandleTransactionLayout";
 
 export default function SendMessagePage() {
   const [textValue, setTextValue] = useState("");

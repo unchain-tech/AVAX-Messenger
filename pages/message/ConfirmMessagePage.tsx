@@ -1,9 +1,9 @@
-import MessageCard from "../../components/MessageCard";
-import BasicLayout from "../../components/Layout/BasicLayout";
-import RequireWalletLayout from "../../components/Layout/RequireWalletLayout";
+import MessageCard from "../../components/card/MessageCard";
+import BasicLayout from "../../components/layout/BasicLayout";
+import RequireWalletLayout from "../../components/layout/RequireWalletLayout";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
-import HandleTransactionLayout from "../../components/Layout/HandleTransactionLayout";
+import HandleTransactionLayout from "../../components/layout/HandleTransactionLayout";
 import { useEffect } from "react";
 
 export default function ConfirmMessagePage() {

@@ -1,4 +1,4 @@
-import { Message } from "../hooks/useMessengerContract";
+import { Message } from "../../hooks/useMessengerContract";
 
 type Props = {
   message: Message;

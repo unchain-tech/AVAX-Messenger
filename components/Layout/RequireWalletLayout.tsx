@@ -1,5 +1,5 @@
 import styles from "./BasicLayout.module.css";
-import ConnectWalletButton from "../ConnectWalletButton";
+import ConnectWalletButton from "../button/ConnectWalletButton";
 
 type Props = {
   children: React.ReactNode;

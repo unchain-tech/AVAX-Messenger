@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import RequireWalletLayout from "../components/Layout/RequireWalletLayout";
-import BasicLayout from "../components/Layout/BasicLayout";
+import RequireWalletLayout from "../components/layout/RequireWalletLayout";
+import BasicLayout from "../components/layout/BasicLayout";
 import { useWallet } from "../hooks/useWallet";
 
 const Home: NextPage = () => {
