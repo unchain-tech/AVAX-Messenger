@@ -7,6 +7,7 @@ import TextLine from "../../components/TextLine";
 import NumberLine from "../../components/NumberLine";
 import SendMessageButton from "../../components/SendMessageButton";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
+import { BigNumber } from "ethers";
 
 export default function SendMessagePage() {
   const [textValue, setTextValue] = useState("");
@@ -48,7 +49,7 @@ export default function SendMessagePage() {
                   sendMessage({
                     text: textValue,
                     receiver: receiverAccountValue,
-                    token: parseInt(tokenValue, 10),
+                    token: BigNumber.from(tokenValue),
                   });
                 }}
               />

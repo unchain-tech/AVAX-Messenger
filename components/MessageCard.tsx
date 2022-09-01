@@ -1,4 +1,4 @@
-import { Message } from "../pages/message/ConfirmMessagePage";
+import { Message } from "../hooks/useMessengerContract";
 
 type Props = {
   message: Message;
@@ -16,7 +16,7 @@ export default function MessageCard({
   return (
     <div>
       <div>index: {index}</div>
-      <div>deposit: {message.deposit}</div>
+      <div>deposit: {message.deposit.toString()}</div>
       <div>timestamp: {message.timestamp.toDateString()}</div>
       <div>text: {message.text}</div>
       {message.isPending && (

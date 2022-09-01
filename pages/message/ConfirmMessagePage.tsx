@@ -4,16 +4,6 @@ import RequireWalletLayout from "../../components/Layout/RequireWalletLayout";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
 
-// TODO:numberでいいのか
-export type Message = {
-  deposit: number;
-  timestamp: Date;
-  text: string;
-  isPending: boolean;
-  sender: number;
-  receiver: number;
-};
-
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
   const { ownMessages, acceptMessage, denyMessage } = useMessengerContract({

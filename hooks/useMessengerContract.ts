@@ -1,35 +1,20 @@
 import { useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 import abi from "../utils/Messenger.json";
-import { Message } from "../pages/message/ConfirmMessagePage";
 
 const contractAddress = "0x75e1cF6cD73659A3dd17a303DC5087EDC9Cc391c";
 const contractABI = abi.abi;
 
-type sendMessageProps = {
+export type Message = {
+  deposit: BigNumber;
+  timestamp: Date;
   text: string;
+  isPending: boolean;
+  sender: string;
   receiver: string;
-  token: number; //TODO: numberでいいのかわからん！
 };
 
-type confirmMessageProps = {
-  index: number;
-};
-
-type ReturnUseMessengerContract = {
-  mining: boolean;
-  ownMessages: Message[];
-  sendMessage: (props: sendMessageProps) => void;
-  acceptMessage: (props: confirmMessageProps) => void;
-  denyMessage: (props: confirmMessageProps) => void;
-};
-
-type Props = {
-  currentAccount: string | undefined;
-};
-
-// TODO: numberでいいのか
-type contractMessage = {
+type MessageFromContract = {
   deposit: BigNumber;
   timestamp: BigNumber;
   text: string;
@@ -37,6 +22,29 @@ type contractMessage = {
   sender: BigNumber;
   receiver: BigNumber;
 };
+
+type SendMessageProps = {
+  text: string;
+  receiver: string;
+  token: BigNumber;
+};
+
+type ConfirmMessageProps = {
+  index: number;
+};
+
+type ReturnUseMessengerContract = {
+  mining: boolean;
+  ownMessages: Message[];
+  sendMessage: (props: SendMessageProps) => void;
+  acceptMessage: (props: ConfirmMessageProps) => void;
+  denyMessage: (props: ConfirmMessageProps) => void;
+};
+
+type Props = {
+  currentAccount: string | undefined;
+};
+
 // まずgetOwnMessagesは毎度呼ばなくてもいい
 // usecallbackを使うか？
 export const useMessengerContract = ({
@@ -46,7 +54,7 @@ export const useMessengerContract = ({
   const [messengerContract, setMessengerContract] = useState<ethers.Contract>();
   const [ownMessages, setOwnMessages] = useState<Message[]>([]);
 
-  function getMessageContract() {
+  function getMessengerContract() {
     try {
       const { ethereum } = window as any;
       if (ethereum) {
@@ -69,15 +77,14 @@ export const useMessengerContract = ({
   async function getOwnMessages() {
     try {
       if (messengerContract) {
-        alert("confirm");
         const OwnMessages = await messengerContract.getOwnMessages({
           gasLimit: 300000,
         });
         const messagesCleaned: Message[] = OwnMessages.map(
-          (message: contractMessage) => {
+          (message: MessageFromContract) => {
             return {
-              deposit: message.deposit.toString(),
-              timestamp: new Date((message.timestamp as any) * 1000), //TODO: any
+              deposit: message.deposit,
+              timestamp: new Date(message.timestamp.toNumber() * 1000),
               text: message.text,
               isPending: message.isPending,
               sender: message.sender.toString(),
@@ -94,9 +101,14 @@ export const useMessengerContract = ({
     }
   }
 
-  async function sendMessage({ text, receiver, token }: sendMessageProps) {
+  async function sendMessage({ text, receiver, token }: SendMessageProps) {
     try {
       if (messengerContract) {
+        console.log(
+          "call post with receiver:[%s], token:[%s]",
+          receiver,
+          token.toString()
+        );
         // MAX_ETH = gas_fee * gasLimit
         const postTxn = await messengerContract.post(text, receiver, {
           gasLimit: 300000,
@@ -115,9 +127,10 @@ export const useMessengerContract = ({
     }
   }
 
-  async function acceptMessage({ index }: confirmMessageProps) {
+  async function acceptMessage({ index }: ConfirmMessageProps) {
     try {
       if (messengerContract) {
+        console.log("call accept with index [%d]", index);
         // MAX_ETH = gas_fee * gasLimit
         const postTxn = await messengerContract.accept(index, {
           gasLimit: 300000,
@@ -135,9 +148,10 @@ export const useMessengerContract = ({
     }
   }
 
-  async function denyMessage({ index }: confirmMessageProps) {
+  async function denyMessage({ index }: ConfirmMessageProps) {
     try {
       if (messengerContract) {
+        console.log("call deny with index [%d]", index);
         // MAX_ETH = gas_fee * gasLimit
         const postTxn = await messengerContract.deny(index, {
           gasLimit: 300000,
@@ -156,7 +170,7 @@ export const useMessengerContract = ({
   }
 
   useEffect(() => {
-    getMessageContract();
+    getMessengerContract();
     getOwnMessages();
   }, [currentAccount]);
 
