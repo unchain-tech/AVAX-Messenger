@@ -18,11 +18,11 @@ export default function MessageCard({
   return (
     <div className={styles.card}>
       <div className={styles.details}>
-        <span className={styles.title}>from {message.sender}</span>
-        <span>{message.timestamp.toDateString()}</span>
+        <p className={styles.title}>from {message.sender}</p>
+        <p>{message.timestamp.toDateString()}</p>
       </div>
-      <span>text: {message.text}</span>
-      <span>depositInWei: {depositInEther}</span>
+      <p>text: {message.text}</p>
+      <p>depositInWei: {depositInEther}</p>
       {message.isPending && (
         <div>
           <button onClick={onClickAccept}>accept</button>
