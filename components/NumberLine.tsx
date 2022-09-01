@@ -1,16 +1,17 @@
 type Props = {
   name: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function TextBox({ name, onChange }: Props) {
+export default function NumberLine({ name, onChange }: Props) {
   return (
     <div>
       <div>{name}</div>
-      <textarea
+      <input
+        type="number"
         name={name}
         placeholder="type here"
-        id="text box"
+        id="text line"
         onChange={onChange}
       />
     </div>

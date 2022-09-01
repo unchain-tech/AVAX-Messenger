@@ -1,6 +1,6 @@
 import MessageCard from "../../components/MessageCard";
-import PageLayout from "../../components/PageLayout";
-import UseWalletLayout from "../../components/UseWalletLayout";
+import BasicLayout from "../../components/Layout/BasicLayout";
+import RequireWalletLayout from "../../components/Layout/RequireWalletLayout";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
 
@@ -14,8 +14,6 @@ export type Message = {
   receiver: number;
 };
 
-//TODO: callbackとか使う
-
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
   const { ownMessages, acceptMessage, denyMessage } = useMessengerContract({
@@ -23,8 +21,8 @@ export default function ConfirmMessagePage() {
   });
 
   return (
-    <PageLayout>
-      <UseWalletLayout
+    <BasicLayout>
+      <RequireWalletLayout
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
@@ -32,23 +30,22 @@ export default function ConfirmMessagePage() {
           <div>Confirm Message Page !</div>
           <div>wallet is {currentAccount}</div>
           {/* メッセージの一覧表示 */}
-          {currentAccount &&
-            ownMessages.map((message, index) => {
-              return (
-                <div key={index}>
-                  <MessageCard
-                    message={message}
-                    index={index}
-                    onClickAccept={() => {
-                      acceptMessage({ index });
-                    }}
-                    onClickDeny={() => denyMessage({ index })}
-                  />
-                </div>
-              );
-            })}
+          {ownMessages.map((message, index) => {
+            return (
+              <div key={index}>
+                <MessageCard
+                  message={message}
+                  index={index}
+                  onClickAccept={() => {
+                    acceptMessage({ index });
+                  }}
+                  onClickDeny={() => denyMessage({ index })}
+                />
+              </div>
+            );
+          })}
         </div>
-      </UseWalletLayout>
-    </PageLayout>
+      </RequireWalletLayout>
+    </BasicLayout>
   );
 }

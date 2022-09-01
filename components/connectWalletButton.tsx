@@ -5,7 +5,7 @@ type Props = {
 export default function ConnectWalletButton({ connectWallet }: Props) {
   return (
     <div>
-      <button className="waveButton" onClick={connectWallet}>
+      <button className="connectWalletButton" onClick={connectWallet}>
         Connect Wallet
       </button>
     </div>

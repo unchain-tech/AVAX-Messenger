@@ -3,7 +3,7 @@ import { BigNumber, ethers } from "ethers";
 import abi from "../utils/Messenger.json";
 import { Message } from "../pages/message/ConfirmMessagePage";
 
-const contractAddress = "0xC3c90d7093712840c62ef806B1a026377A293286";
+const contractAddress = "0x75e1cF6cD73659A3dd17a303DC5087EDC9Cc391c";
 const contractABI = abi.abi;
 
 type sendMessageProps = {
@@ -37,7 +37,8 @@ type contractMessage = {
   sender: BigNumber;
   receiver: BigNumber;
 };
-
+// まずgetOwnMessagesは毎度呼ばなくてもいい
+// usecallbackを使うか？
 export const useMessengerContract = ({
   currentAccount,
 }: Props): ReturnUseMessengerContract => {
@@ -66,9 +67,9 @@ export const useMessengerContract = ({
   }
 
   async function getOwnMessages() {
-    alert("confirm");
     try {
       if (messengerContract) {
+        alert("confirm");
         const OwnMessages = await messengerContract.getOwnMessages({
           gasLimit: 300000,
         });
