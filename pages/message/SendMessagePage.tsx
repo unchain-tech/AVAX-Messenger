@@ -23,38 +23,34 @@ export default function SendMessagePage() {
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
-        <div>
-          <div>send message !</div>
-          <div>wallet is {currentAccount}</div>
-          {mining ? (
-            <div>mining...</div>
-          ) : (
-            <div>
-              <TextBox
-                name="text"
-                onChange={(e) => setTextValue(e.target.value)}
-              />
-              <TextLine
-                name="account address to send"
-                onChange={(e) => setReceiverAccountValue(e.target.value)}
-              />
-              <NumberLine
-                name="amount of avax to attach"
-                onChange={(e) => setTokenValue(e.target.value)}
-              />
-              <SendMessageButton
-                name="send message"
-                onClick={() => {
-                  sendMessage({
-                    text: textValue,
-                    receiver: receiverAccountValue,
-                    tokenInEther: tokenValue,
-                  });
-                }}
-              />
-            </div>
-          )}
-        </div>
+        {mining ? (
+          <div>mining...</div>
+        ) : (
+          <div>
+            <TextBox
+              name="text"
+              onChange={(e) => setTextValue(e.target.value)}
+            />
+            <TextLine
+              name="account address to send"
+              onChange={(e) => setReceiverAccountValue(e.target.value)}
+            />
+            <NumberLine
+              name="amount of avax to attach"
+              onChange={(e) => setTokenValue(e.target.value)}
+            />
+            <SendMessageButton
+              name="send message"
+              onClick={() => {
+                sendMessage({
+                  text: textValue,
+                  receiver: receiverAccountValue,
+                  tokenInEther: tokenValue,
+                });
+              }}
+            />
+          </div>
+        )}
       </RequireWalletLayout>
     </BasicLayout>
   );

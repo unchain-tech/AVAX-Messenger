@@ -22,25 +22,20 @@ export default function ConfirmMessagePage() {
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
-        <div>
-          <div>Confirm Message Page !</div>
-          <div>wallet is {currentAccount}</div>
-          {mining && <div>mining...</div>}
-          {ownMessages.map((message, index) => {
-            return (
-              <div key={index}>
-                <MessageCard
-                  message={message}
-                  index={index}
-                  onClickAccept={() => {
-                    acceptMessage({ index });
-                  }}
-                  onClickDeny={() => denyMessage({ index })}
-                />
-              </div>
-            );
-          })}
-        </div>
+        {mining && <div>mining...</div>}
+        {ownMessages.map((message, index) => {
+          return (
+            <div key={index}>
+              <MessageCard
+                message={message}
+                onClickAccept={() => {
+                  acceptMessage({ index });
+                }}
+                onClickDeny={() => denyMessage({ index })}
+              />
+            </div>
+          );
+        })}
       </RequireWalletLayout>
     </BasicLayout>
   );

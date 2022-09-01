@@ -16,8 +16,6 @@ const Home: NextPage = () => {
         <div className={styles.container}>
           <h2 className={styles.title}>Welcome to Messenger !</h2>
           <main className={styles.main}>
-            <h3>wallet connecting: {currentAccount}</h3>
-
             <div className={styles.card}>
               <Link href="/message/SendMessagePage">
                 <h2>send &rarr;</h2>
