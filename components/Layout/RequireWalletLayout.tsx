@@ -14,12 +14,12 @@ export default function RequireWalletLayout({
   return (
     <div>
       {currentAccount ? (
-        <main>{children}</main>
-      ) : (
         <div>
           <h3>wallet connecting: {currentAccount}</h3>
-          <ConnectWalletButton connectWallet={connectWallet} />
+          <main>{children}</main>
         </div>
+      ) : (
+        <ConnectWalletButton connectWallet={connectWallet} />
       )}
     </div>
   );
