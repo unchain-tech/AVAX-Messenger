@@ -37,7 +37,8 @@ type contractMessage = {
   sender: BigNumber;
   receiver: BigNumber;
 };
-
+// まずgetOwnMessagesは毎度呼ばなくてもいい
+// usecallbackを使うか？
 export const useMessengerContract = ({
   currentAccount,
 }: Props): ReturnUseMessengerContract => {

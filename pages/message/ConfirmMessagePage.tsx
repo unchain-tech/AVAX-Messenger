@@ -14,8 +14,6 @@ export type Message = {
   receiver: number;
 };
 
-//TODO: callbackとか使う
-
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
   const { ownMessages, acceptMessage, denyMessage } = useMessengerContract({
@@ -32,21 +30,20 @@ export default function ConfirmMessagePage() {
           <div>Confirm Message Page !</div>
           <div>wallet is {currentAccount}</div>
           {/* メッセージの一覧表示 */}
-          {currentAccount &&
-            ownMessages.map((message, index) => {
-              return (
-                <div key={index}>
-                  <MessageCard
-                    message={message}
-                    index={index}
-                    onClickAccept={() => {
-                      acceptMessage({ index });
-                    }}
-                    onClickDeny={() => denyMessage({ index })}
-                  />
-                </div>
-              );
-            })}
+          {ownMessages.map((message, index) => {
+            return (
+              <div key={index}>
+                <MessageCard
+                  message={message}
+                  index={index}
+                  onClickAccept={() => {
+                    acceptMessage({ index });
+                  }}
+                  onClickDeny={() => denyMessage({ index })}
+                />
+              </div>
+            );
+          })}
         </div>
       </RequireWalletLayout>
     </BasicLayout>
