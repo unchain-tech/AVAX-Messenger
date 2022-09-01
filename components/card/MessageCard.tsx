@@ -19,7 +19,7 @@ export default function MessageCard({
   return (
     <div>
       <div>index: {index}</div>
-      <div>deposit: {depositInEther}</div>
+      <div>depositInWei: {depositInEther}</div>
       <div>timestamp: {message.timestamp.toDateString()}</div>
       <div>text: {message.text}</div>
       {message.isPending && (

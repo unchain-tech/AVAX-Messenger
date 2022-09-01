@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 import abi from "../utils/Messenger.json";
 
-const contractAddress = "0x75e1cF6cD73659A3dd17a303DC5087EDC9Cc391c";
+const contractAddress = "0xa725B1bE9c6b43A66962B7047508AcfaFD2C76aC";
 const contractABI = abi.abi;
 
 export type Message = {
@@ -15,7 +15,7 @@ export type Message = {
 };
 
 type MessageFromContract = {
-  deposit: BigNumber;
+  depositInWei: BigNumber;
   timestamp: BigNumber;
   text: string;
   isPending: boolean;
@@ -82,7 +82,7 @@ export const useMessengerContract = ({
       const messagesCleaned: Message[] = OwnMessages.map(
         (message: MessageFromContract) => {
           return {
-            depositInWei: message.deposit,
+            depositInWei: message.depositInWei,
             timestamp: new Date(message.timestamp.toNumber() * 1000),
             text: message.text,
             isPending: message.isPending,
@@ -174,7 +174,7 @@ export const useMessengerContract = ({
       sender: BigNumber,
       receiver: BigNumber
     ) => {
-      console.log("NewMessage");
+      console.log("NewMessage from %s", sender.toString());
       if (receiver.toString().toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => [
           ...prevState,
@@ -191,7 +191,11 @@ export const useMessengerContract = ({
     };
 
     const onMessageConfirmed = (receiver: BigNumber, index: BigNumber) => {
-      console.log("MessageConfirmed", receiver, index.toNumber());
+      console.log(
+        "MessageConfirmed index:[%d] receiver: [%s]",
+        index.toNumber(),
+        receiver.toString()
+      );
       if (receiver.toString().toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => {
           prevState[index.toNumber()].isPending = false;
