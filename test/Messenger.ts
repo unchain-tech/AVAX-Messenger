@@ -93,7 +93,7 @@ describe("Messenger", function () {
       });
       const messages = await messenger.connect(otherAccount).getOwnMessages();
       const message = messages[0];
-      expect(message.deposit).to.equal(test_deposit);
+      expect(message.depositInWei).to.equal(test_deposit);
       expect(message.text).to.equal(test_text);
       expect(message.isPending).to.equal(true);
       expect(message.sender).to.equal(owner.address);

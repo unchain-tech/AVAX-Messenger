@@ -11,7 +11,7 @@ contract Messenger is Ownable {
 
     // メッセージ情報を定義します。
     struct Message {
-        uint256 deposit;
+        uint256 depositInWei;
         uint256 timestamp;
         string text;
         bool isPending;
@@ -25,7 +25,7 @@ contract Messenger is Ownable {
     mapping(address => uint256) private numOfPendingAtAddress;
 
     event NewMessage(
-        uint256 deposit,
+        uint256 depositInWei,
         uint256 timestamp,
         string text,
         bool isPending,
@@ -93,7 +93,7 @@ contract Messenger is Ownable {
         Message memory message = accessMessageSafety(msg.sender, _index);
 
         // メッセージの受取人にavaxを送信します。
-        sendAvax(message.receiver, message.deposit);
+        sendAvax(message.receiver, message.depositInWei);
 
         emit MessageConfirmed(message.receiver, _index);
     }
@@ -105,7 +105,7 @@ contract Messenger is Ownable {
         Message memory message = accessMessageSafety(msg.sender, _index);
 
         // メッセージの送信者にavaxを返却します。
-        sendAvax(message.sender, message.deposit);
+        sendAvax(message.sender, message.depositInWei);
 
         emit MessageConfirmed(message.receiver, _index);
     }
