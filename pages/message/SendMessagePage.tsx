@@ -8,6 +8,7 @@ import NumberLine from "../../components/NumberLine";
 import SendMessageButton from "../../components/SendMessageButton";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { BigNumber } from "ethers";
+import HandleTransactionLayout from "../../components/Layout/HandleTransactionLayout";
 
 export default function SendMessagePage() {
   const [textValue, setTextValue] = useState("");
@@ -27,9 +28,7 @@ export default function SendMessagePage() {
         <div>
           <div>send message !</div>
           <div>wallet is {currentAccount}</div>
-          {mining ? (
-            <div>mining...</div>
-          ) : (
+          <HandleTransactionLayout mining={mining}>
             <div>
               <TextBox
                 name="text"
@@ -54,7 +53,7 @@ export default function SendMessagePage() {
                 }}
               />
             </div>
-          )}
+          </HandleTransactionLayout>
         </div>
       </RequireWalletLayout>
     </BasicLayout>
