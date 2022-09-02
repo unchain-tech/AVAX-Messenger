@@ -152,6 +152,7 @@ contract Messenger is Ownable {
         require(success, "Failed to withdraw AVAX from contract");
     }
 
+    // ユーザのアドレス宛のメッセージを全て取得します。
     function getOwnMessages() public view returns (Message[] memory) {
         return messagesAtAddress[msg.sender];
     }
