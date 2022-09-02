@@ -16,8 +16,10 @@ export default function RequireWalletLayout({
     <div>
       {currentAccount ? (
         <div>
-          <h3>wallet address connecting:</h3>
-          <span>{currentAccount}</span>
+          <div className={styles.wallet}>
+            <p className={styles.title}>Your connecting address: </p>
+            <p>{currentAccount}</p>
+          </div>
           <main>{children}</main>
         </div>
       ) : (

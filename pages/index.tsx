@@ -18,8 +18,8 @@ const Home: NextPage = () => {
           <title>Messenger</title>
         </Head>
         <div className={styles.container}>
-          <h2 className={styles.title}>Welcome to Messenger !</h2>
           <main className={styles.main}>
+            <h1 className={styles.title}>Welcome to Messenger 📫</h1>
             <div className={styles.card}>
               <Link href="/message/SendMessagePage">
                 <h2>send &rarr;</h2>

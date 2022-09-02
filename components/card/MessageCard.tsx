@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { Message } from "../../hooks/useMessengerContract";
+import ConfirmMessageButton from "../button/ConfirmMessageButton";
 import styles from "./MessageCard.module.css";
 
 type Props = {
@@ -17,16 +18,14 @@ export default function MessageCard({
 
   return (
     <div className={styles.card}>
-      <div className={styles.details}>
-        <p className={styles.title}>from {message.sender}</p>
-        <p>{message.timestamp.toDateString()}</p>
-      </div>
-      <p>text: {message.text}</p>
-      <p>depositInWei: {depositInEther}</p>
+      <p className={styles.title}>from {message.sender}</p>
+      <p>{message.timestamp.toDateString()}</p>
+      <p>AVAX: {depositInEther}</p>
+      <p className={styles.text}>{message.text}</p>
       {message.isPending && (
-        <div>
-          <button onClick={onClickAccept}>accept</button>
-          <button onClick={onClickDeny}>deny</button>
+        <div className={styles.container}>
+          <ConfirmMessageButton name="accept" onClick={onClickAccept} />
+          <ConfirmMessageButton name="deny" onClick={onClickAccept} />
         </div>
       )}
     </div>
