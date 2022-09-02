@@ -1,4 +1,3 @@
-import ConnectWalletButton from "../button/ConnectWalletButton";
 import styles from "./RequireWallet.module.css";
 
 type Props = {
@@ -23,7 +22,9 @@ export default function RequireWallet({
           <main>{children}</main>
         </div>
       ) : (
-        <ConnectWalletButton connectWallet={connectWallet} />
+        <button className="connectWalletButton" onClick={connectWallet}>
+          Connect Wallet
+        </button>
       )}
     </div>
   );

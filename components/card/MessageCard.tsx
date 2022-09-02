@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
 import { Message } from "../../hooks/useMessengerContract";
-import ConfirmMessageButton from "../button/ConfirmMessageButton";
 import styles from "./MessageCard.module.css";
 
 type Props = {
@@ -24,8 +23,12 @@ export default function MessageCard({
       <p className={styles.text}>{message.text}</p>
       {message.isPending && (
         <div className={styles.container}>
-          <ConfirmMessageButton name="accept" onClick={onClickAccept} />
-          <ConfirmMessageButton name="deny" onClick={onClickAccept} />
+          <button className={styles.item} onClick={onClickAccept}>
+            accept
+          </button>
+          <button className={styles.item} onClick={onClickDeny}>
+            deny
+          </button>
         </div>
       )}
     </div>
