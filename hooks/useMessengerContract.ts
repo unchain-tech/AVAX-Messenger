@@ -23,11 +23,13 @@ type MessageFromContract = {
   receiver: BigNumber;
 };
 
-export type SendMessageProps = {
+type SendMessageProps = {
   text: string;
   receiver: string;
   tokenInEther: string;
 };
+
+export type SendMessage = (props: SendMessageProps) => void;
 
 type ConfirmMessageProps = {
   index: number;

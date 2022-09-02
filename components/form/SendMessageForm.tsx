@@ -1,9 +1,9 @@
-import { SendMessageProps } from "../../hooks/useMessengerContract";
+import { SendMessage } from "../../hooks/useMessengerContract";
 import styles from "./SendMessageForm.module.css";
 import { useState } from "react";
 
 type Props = {
-  sendMessage: (props: SendMessageProps) => void;
+  sendMessage: SendMessage;
 };
 
 export default function SendMessageForm({ sendMessage }: Props) {
