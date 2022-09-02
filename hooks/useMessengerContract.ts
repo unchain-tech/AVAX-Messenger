@@ -13,15 +13,6 @@ export type Message = {
   sender: string;
   receiver: string;
 };
-//TODO: タイプファイルかanyで対応する
-type MessageFromContract = {
-  depositInWei: BigNumber;
-  timestamp: BigNumber;
-  text: string;
-  isPending: boolean;
-  sender: BigNumber;
-  receiver: BigNumber;
-};
 
 type SendMessageProps = {
   text: string;
@@ -81,18 +72,16 @@ export const useMessengerContract = ({
       const OwnMessages = await messengerContract.getOwnMessages({
         gasLimit: 300000,
       });
-      const messagesCleaned: Message[] = OwnMessages.map(
-        (message: MessageFromContract) => {
-          return {
-            depositInWei: message.depositInWei,
-            timestamp: new Date(message.timestamp.toNumber() * 1000),
-            text: message.text,
-            isPending: message.isPending,
-            sender: message.sender.toString(),
-            receiver: message.receiver.toString(),
-          };
-        }
-      );
+      const messagesCleaned: Message[] = OwnMessages.map((message: any) => {
+        return {
+          depositInWei: message.depositInWei,
+          timestamp: new Date(message.timestamp.toNumber() * 1000),
+          text: message.text,
+          isPending: message.isPending,
+          sender: message.sender.toString(),
+          receiver: message.receiver.toString(),
+        };
+      });
       setOwnMessages(messagesCleaned);
     } catch (error) {
       console.log(error);
