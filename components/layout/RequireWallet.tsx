@@ -1,5 +1,5 @@
 import ConnectWalletButton from "../button/ConnectWalletButton";
-import styles from "./RequireWalletLayout.module.css";
+import styles from "./RequireWallet.module.css";
 
 type Props = {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ type Props = {
   connectWallet: () => void;
 };
 
-export default function RequireWalletLayout({
+export default function RequireWallet({
   children,
   currentAccount,
   connectWallet,

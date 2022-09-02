@@ -1,16 +1,16 @@
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import RequireWalletLayout from "../components/layout/RequireWalletLayout";
-import BasicLayout from "../components/layout/BasicLayout";
+import RequireWallet from "../components/layout/RequireWallet";
+import Layout from "../components/layout/Layout";
 import { useWallet } from "../hooks/useWallet";
 import Head from "next/head";
 
 const Home: NextPage = () => {
   const { currentAccount, connectWallet } = useWallet();
   return (
-    <BasicLayout home>
-      <RequireWalletLayout
+    <Layout home>
+      <RequireWallet
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
@@ -35,8 +35,8 @@ const Home: NextPage = () => {
             </div>
           </main>
         </div>
-      </RequireWalletLayout>
-    </BasicLayout>
+      </RequireWallet>
+    </Layout>
   );
 };
 

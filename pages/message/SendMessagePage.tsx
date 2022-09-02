@@ -1,6 +1,6 @@
 import { useState } from "react";
-import BasicLayout from "../../components/layout/BasicLayout";
-import RequireWalletLayout from "../../components/layout/RequireWalletLayout";
+import Layout from "../../components/layout/Layout";
+import RequireWallet from "../../components/layout/RequireWallet";
 import { useWallet } from "../../hooks/useWallet";
 import TextBox from "../../components/input/TextBox";
 import TextLine from "../../components/input/TextLine";
@@ -19,8 +19,8 @@ export default function SendMessagePage() {
   });
 
   return (
-    <BasicLayout>
-      <RequireWalletLayout
+    <Layout>
+      <RequireWallet
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
@@ -55,7 +55,7 @@ export default function SendMessagePage() {
             />
           </div>
         )}
-      </RequireWalletLayout>
-    </BasicLayout>
+      </RequireWallet>
+    </Layout>
   );
 }

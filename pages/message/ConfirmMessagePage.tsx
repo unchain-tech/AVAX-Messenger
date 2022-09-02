@@ -1,6 +1,6 @@
 import MessageCard from "../../components/card/MessageCard";
-import BasicLayout from "../../components/layout/BasicLayout";
-import RequireWalletLayout from "../../components/layout/RequireWalletLayout";
+import Layout from "../../components/layout/Layout";
+import RequireWallet from "../../components/layout/RequireWallet";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
 import { useEffect } from "react";
@@ -18,8 +18,8 @@ export default function ConfirmMessagePage() {
   }, [currentAccount]);
 
   return (
-    <BasicLayout>
-      <RequireWalletLayout
+    <Layout>
+      <RequireWallet
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
@@ -40,7 +40,7 @@ export default function ConfirmMessagePage() {
             </div>
           );
         })}
-      </RequireWalletLayout>
-    </BasicLayout>
+      </RequireWallet>
+    </Layout>
   );
 }
