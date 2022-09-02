@@ -23,7 +23,7 @@ type MessageFromContract = {
   receiver: BigNumber;
 };
 
-type SendMessageProps = {
+export type SendMessageProps = {
   text: string;
   receiver: string;
   tokenInEther: string;
