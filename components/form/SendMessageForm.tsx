@@ -8,13 +8,13 @@ type Props = {
 
 export default function SendMessageForm({ sendMessage }: Props) {
   const [textValue, setTextValue] = useState("");
-  const [tokenValue, setTokenValue] = useState("");
   const [receiverAccountValue, setReceiverAccountValue] = useState("");
+  const [tokenValue, setTokenValue] = useState("0");
 
   return (
     <div>
       <div className={styles.item}>
-        <div>text to send</div>
+        <div>text</div>
         <textarea
           name="text"
           placeholder="hello"

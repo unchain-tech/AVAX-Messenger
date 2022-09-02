@@ -6,15 +6,17 @@
 }
 
 p.title{
-  font-size: 15px;
   font-weight: 600;
-  width: auto;
 }
 
 p.text{
   padding: 10px 0 0 0;
-  border-radius: 10px;
-  min-height: 50px;
+  min-height: 60px;
+}
+
+.date {
+  text-align: right;
+  margin: 0;
 }
 
 .container {

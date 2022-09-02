@@ -18,7 +18,6 @@ export default function MessageCard({
   return (
     <div className={styles.card}>
       <p className={styles.title}>from {message.sender}</p>
-      <p>{message.timestamp.toDateString()}</p>
       <p>AVAX: {depositInEther}</p>
       <p className={styles.text}>{message.text}</p>
       {message.isPending && (
@@ -31,6 +30,7 @@ export default function MessageCard({
           </button>
         </div>
       )}
+      <p className={styles.date}>{message.timestamp.toDateString()}</p>
     </div>
   );
 }
