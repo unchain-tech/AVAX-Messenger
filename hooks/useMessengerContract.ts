@@ -128,7 +128,6 @@ export const useMessengerContract = ({
     if (!messengerContract) return;
     try {
       console.log("call accept with index [%d]", index);
-      // MAX_ETH = gas_fee * gasLimit
       const postTxn = await messengerContract.accept(index, {
         gasLimit: 300000,
       });
@@ -146,7 +145,6 @@ export const useMessengerContract = ({
     if (!messengerContract) return;
     try {
       console.log("call deny with index [%d]", index);
-      // MAX_ETH = gas_fee * gasLimit
       const postTxn = await messengerContract.deny(index, {
         gasLimit: 300000,
       });
