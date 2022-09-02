@@ -16,7 +16,7 @@ export default function RequireWallet({
       {currentAccount ? (
         <div>
           <div className={styles.wallet}>
-            <p className={styles.title}>Your connecting address: </p>
+            <p className={styles.title}>wallet: </p>
             <p>{currentAccount}</p>
           </div>
           <main>{children}</main>

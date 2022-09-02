@@ -12,54 +12,55 @@ export default function SendMessageForm({ sendMessage }: Props) {
   const [tokenValue, setTokenValue] = useState("0");
 
   return (
-    <div>
-      <div className={styles.item}>
-        <div>text</div>
-        <textarea
-          name="text"
-          placeholder="hello"
-          id="input_text"
-          onChange={(e) => setTextValue(e.target.value)}
-          className={styles.text}
-        />
-      </div>
+    <div className={styles.container}>
+      <div className={styles.form}>
+        <div className={styles.title}>Send your message !</div>
+        <div className={styles.input_container}>
+          <textarea
+            name="text"
+            placeholder="text"
+            id="input_text"
+            onChange={(e) => setTextValue(e.target.value)}
+            className={styles.text}
+          />
+        </div>
 
-      <div className={styles.item}>
-        <div>address to send</div>
-        <input
-          name="address"
-          placeholder="0x..."
-          id="input_address"
-          className={styles.address}
-          onChange={(e) => setReceiverAccountValue(e.target.value)}
-        />
-      </div>
+        <div className={styles.input_container}>
+          <input
+            name="address"
+            placeholder="receiver address: 0x..."
+            id="input_address"
+            className={styles.address}
+            onChange={(e) => setReceiverAccountValue(e.target.value)}
+          />
+        </div>
 
-      <div className={styles.item}>
-        <div>avax to attach</div>
-        <input
-          type="number"
-          name="avax"
-          placeholder="1"
-          id="input_avax"
-          className={styles.avax}
-          onChange={(e) => setTokenValue(e.target.value)}
-        />
-      </div>
+        <div className={styles.input_container}>
+          <input
+            type="number"
+            name="avax"
+            placeholder="avax"
+            id="input_avax"
+            min={0}
+            className={styles.avax}
+            onChange={(e) => setTokenValue(e.target.value)}
+          />
+        </div>
 
-      <div className={styles.button}>
-        <button
-          className="SendMessageButton"
-          onClick={() => {
-            sendMessage({
-              text: textValue,
-              receiver: receiverAccountValue,
-              tokenInEther: tokenValue,
-            });
-          }}
-        >
-          send{" "}
-        </button>
+        <div className={styles.button_container}>
+          <button
+            className="SendMessageButton"
+            onClick={() => {
+              sendMessage({
+                text: textValue,
+                receiver: receiverAccountValue,
+                tokenInEther: tokenValue,
+              });
+            }}
+          >
+            send{" "}
+          </button>
+        </div>
       </div>
     </div>
   );

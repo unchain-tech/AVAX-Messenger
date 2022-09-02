@@ -13,3 +13,10 @@
 .backToHome {
 	margin: 3rem 0 0;
 }
+
+.backToHome a:hover,
+.backToHome a:focus,
+.backToHome a:active {
+	text-decoration: underline;
+	color: #4a8bed;
+  }
