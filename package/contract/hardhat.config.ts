@@ -11,7 +11,10 @@ const config: HardhatUserConfig = {
     fuji: {
       url: "https://api.avax-test.network/ext/bc/C/rpc",
       chainId: 43113,
-      accounts: [`0x${process.env.TEST_ACCOUNT_PRIVATE_KEY}`],
+      accounts:
+        process.env.TEST_ACCOUNT_PRIVATE_KEY !== undefined
+          ? [process.env.TEST_ACCOUNT_PRIVATE_KEY]
+          : [],
     },
     /*
     mainnet: {
