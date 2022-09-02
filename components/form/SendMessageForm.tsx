@@ -20,6 +20,7 @@ export default function SendMessageForm({ sendMessage }: Props) {
           placeholder="hello"
           id="input_text"
           onChange={(e) => setTextValue(e.target.value)}
+          className={styles.text}
         />
       </div>
 
@@ -29,17 +30,19 @@ export default function SendMessageForm({ sendMessage }: Props) {
           name="address"
           placeholder="0x..."
           id="input_address"
+          className={styles.address}
           onChange={(e) => setReceiverAccountValue(e.target.value)}
         />
       </div>
 
       <div className={styles.item}>
-        <div>amount of avax to attach</div>
+        <div>avax to attach</div>
         <input
           type="number"
           name="avax"
           placeholder="1"
           id="input_avax"
+          className={styles.avax}
           onChange={(e) => setTokenValue(e.target.value)}
         />
       </div>

@@ -5,3 +5,16 @@
 .button {
   margin-top:20px;
 }
+
+textarea.text {
+  width: 300px;
+  height: 60px;
+}
+
+input.address {
+  width: 330px;
+}
+
+input.avax {
+  width: 60px;
+}
