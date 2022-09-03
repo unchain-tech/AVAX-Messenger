@@ -22,12 +22,14 @@ type PropsSendMessage = {
 
 export type SendMessage = (props: PropsSendMessage) => void;
 
+// この引数省略したい
 type PropsConfirmMessage = {
   index: number;
 };
 
 type ReturnUseMessengerContract = {
   mining: boolean;
+  owner: string | undefined;
   ownMessages: Message[];
   messengerContract: ethers.Contract | undefined;
   getOwnMessages: () => void;
@@ -46,6 +48,7 @@ export const useMessengerContract = ({
   const [mining, setMining] = useState<boolean>(false);
   const [messengerContract, setMessengerContract] = useState<ethers.Contract>();
   const [ownMessages, setOwnMessages] = useState<Message[]>([]);
+  const [owner, setOwner] = useState<string>();
 
   function getMessengerContract() {
     try {
@@ -70,9 +73,7 @@ export const useMessengerContract = ({
   async function getOwnMessages() {
     if (!messengerContract) return;
     try {
-      const OwnMessages = await messengerContract.getOwnMessages({
-        gasLimit: 300000,
-      });
+      const OwnMessages = await messengerContract.getOwnMessages();
       const messagesCleaned: Message[] = OwnMessages.map((message: any) => {
         return {
           depositInWei: message.depositInWei,
@@ -102,14 +103,14 @@ export const useMessengerContract = ({
         receiver,
         tokenInWei.toString()
       );
-      const postTxn = await messengerContract.post(text, receiver, {
+      const txn = await messengerContract.post(text, receiver, {
         gasLimit: 300000,
         value: tokenInWei,
       });
-      console.log("Mining...", postTxn.hash);
+      console.log("Mining...", txn.hash);
       setMining(true);
-      await postTxn.wait();
-      console.log("Mined -- ", postTxn.hash);
+      await txn.wait();
+      console.log("Mined -- ", txn.hash);
       setMining(false);
     } catch (error) {
       console.log(error);
@@ -120,13 +121,13 @@ export const useMessengerContract = ({
     if (!messengerContract) return;
     try {
       console.log("call accept with index [%d]", index);
-      const postTxn = await messengerContract.accept(index, {
+      const txn = await messengerContract.accept(index, {
         gasLimit: 300000,
       });
-      console.log("Mining...", postTxn.hash);
+      console.log("Mining...", txn.hash);
       setMining(true);
-      await postTxn.wait();
-      console.log("Mined -- ", postTxn.hash);
+      await txn.wait();
+      console.log("Mined -- ", txn.hash);
       setMining(false);
     } catch (error) {
       console.log(error);
@@ -137,14 +138,25 @@ export const useMessengerContract = ({
     if (!messengerContract) return;
     try {
       console.log("call deny with index [%d]", index);
-      const postTxn = await messengerContract.deny(index, {
+      const txn = await messengerContract.deny(index, {
         gasLimit: 300000,
       });
-      console.log("Mining...", postTxn.hash);
+      console.log("Mining...", txn.hash);
       setMining(true);
-      await postTxn.wait();
-      console.log("Mined -- ", postTxn.hash);
+      await txn.wait();
+      console.log("Mined -- ", txn.hash);
       setMining(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getOwner() {
+    if (!messengerContract) return;
+    try {
+      console.log("call getter of owner");
+      const owner = await messengerContract.owner();
+      setOwner(owner.toLocaleLowerCase());
     } catch (error) {
       console.log(error);
     }
@@ -153,6 +165,10 @@ export const useMessengerContract = ({
   useEffect(() => {
     getMessengerContract();
   }, [currentAccount]);
+
+  useEffect(() => {
+    getOwner();
+  }, [messengerContract]);
 
   useEffect(() => {
     // NewMessageのイベントリスナ
@@ -212,6 +228,7 @@ export const useMessengerContract = ({
 
   return {
     mining,
+    owner,
     ownMessages,
     messengerContract,
     getOwnMessages,
