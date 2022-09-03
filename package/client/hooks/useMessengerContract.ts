@@ -29,13 +29,16 @@ type PropsConfirmMessage = {
 
 type ReturnUseMessengerContract = {
   mining: boolean;
-  owner: string | undefined;
   ownMessages: Message[];
   messengerContract: ethers.Contract | undefined;
+  owner: string | undefined;
+  numOfPendingLimits: BigNumber | undefined;
   getOwnMessages: () => void;
   sendMessage: (props: PropsSendMessage) => void;
   acceptMessage: (props: PropsConfirmMessage) => void;
   denyMessage: (props: PropsConfirmMessage) => void;
+  getOwner: () => void;
+  getNumOfPendingLimits: () => void;
 };
 
 type PropsUseMessengerContract = {
@@ -49,6 +52,7 @@ export const useMessengerContract = ({
   const [messengerContract, setMessengerContract] = useState<ethers.Contract>();
   const [ownMessages, setOwnMessages] = useState<Message[]>([]);
   const [owner, setOwner] = useState<string>();
+  const [numOfPendingLimits, setNumOfPendingLimits] = useState<BigNumber>();
 
   function getMessengerContract() {
     try {
@@ -162,13 +166,20 @@ export const useMessengerContract = ({
     }
   }
 
+  async function getNumOfPendingLimits() {
+    if (!messengerContract) return;
+    try {
+      console.log("call getter of numOfPendingLimits");
+      const limits = await messengerContract.numOfPendingLimits();
+      setNumOfPendingLimits(limits);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getMessengerContract();
   }, [currentAccount]);
-
-  useEffect(() => {
-    getOwner();
-  }, [messengerContract]);
 
   useEffect(() => {
     // NewMessageのイベントリスナ
@@ -228,12 +239,15 @@ export const useMessengerContract = ({
 
   return {
     mining,
-    owner,
     ownMessages,
     messengerContract,
+    owner,
+    numOfPendingLimits,
     getOwnMessages,
     sendMessage,
     acceptMessage,
     denyMessage,
+    getOwner,
+    getNumOfPendingLimits,
   };
 };

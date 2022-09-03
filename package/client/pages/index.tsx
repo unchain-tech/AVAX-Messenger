@@ -5,12 +5,17 @@ import RequireWallet from "../components/layout/RequireWallet";
 import Layout from "../components/layout/Layout";
 import { useWallet } from "../hooks/useWallet";
 import { useMessengerContract } from "../hooks/useMessengerContract";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const { currentAccount, connectWallet } = useWallet();
-  const { owner } = useMessengerContract({
+  const { messengerContract, owner, getOwner } = useMessengerContract({
     currentAccount: currentAccount,
   });
+
+  useEffect(() => {
+    getOwner();
+  }, [messengerContract]);
 
   return (
     <Layout home>
@@ -37,10 +42,10 @@ const Home: NextPage = () => {
 
             {owner === currentAccount && (
               <div className={styles.card}>
-                <Link href="/message/ConfirmMessagePage">
-                  <h2>check &rarr;</h2>
+                <Link href="/message/OwnerPage">
+                  <h2>owner &rarr;</h2>
                 </Link>
-                <p>Check messages from other accounts</p>
+                <p>Owner page</p>
               </div>
             )}
           </main>
