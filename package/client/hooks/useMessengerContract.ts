@@ -22,7 +22,6 @@ type PropsSendMessage = {
 
 export type SendMessage = (props: PropsSendMessage) => void;
 
-// この引数省略したい
 type PropsConfirmMessage = {
   index: number;
 };
