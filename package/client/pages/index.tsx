@@ -1,10 +1,9 @@
 import type { NextPage } from "next";
-import styles from "../styles/Home.module.css";
+import styles from "./Home.module.css";
 import Link from "next/link";
 import RequireWallet from "../components/layout/RequireWallet";
 import Layout from "../components/layout/Layout";
 import { useWallet } from "../hooks/useWallet";
-import Head from "next/head";
 
 const Home: NextPage = () => {
   const { currentAccount, connectWallet } = useWallet();
@@ -14,9 +13,6 @@ const Home: NextPage = () => {
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
-        <Head>
-          <title>Messenger</title>
-        </Head>
         <div className={styles.container}>
           <main className={styles.main}>
             <h1 className={styles.title}>Welcome to Messenger 📫</h1>

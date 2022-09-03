@@ -4,18 +4,23 @@ import RequireWallet from "../../components/layout/RequireWallet";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
 import { useEffect } from "react";
-import Head from "next/head";
 
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
-  const { ownMessages, mining, getOwnMessages, acceptMessage, denyMessage } =
-    useMessengerContract({
-      currentAccount: currentAccount,
-    });
+  const {
+    ownMessages,
+    mining,
+    messengerContract,
+    getOwnMessages,
+    acceptMessage,
+    denyMessage,
+  } = useMessengerContract({
+    currentAccount: currentAccount,
+  });
 
   useEffect(() => {
     getOwnMessages();
-  }, [currentAccount]);
+  }, [messengerContract]);
 
   return (
     <Layout>
@@ -23,9 +28,6 @@ export default function ConfirmMessagePage() {
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
-        <Head>
-          <title>Messenger</title>
-        </Head>
         {mining && <div>mining...</div>}
         {ownMessages.map((message, index) => {
           return (

@@ -19,7 +19,7 @@ export default function RequireWallet({
             <p className={styles.title}>wallet: </p>
             <p>{currentAccount}</p>
           </div>
-          <main>{children}</main>
+          {children}
         </div>
       ) : (
         <button className="connectWalletButton" onClick={connectWallet}>

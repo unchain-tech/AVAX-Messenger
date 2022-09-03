@@ -16,6 +16,7 @@ export default function Layout({ children, home }: Props) {
           name="description"
           content="It is a message dapp that exchanges text and avax"
         />
+        <title>Messenger</title>
       </Head>
       <main>{children}</main>
       {!home && (

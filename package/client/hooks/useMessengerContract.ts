@@ -14,34 +14,35 @@ export type Message = {
   receiver: string;
 };
 
-type SendMessageProps = {
+type PropsSendMessage = {
   text: string;
   receiver: string;
   tokenInEther: string;
 };
 
-export type SendMessage = (props: SendMessageProps) => void;
+export type SendMessage = (props: PropsSendMessage) => void;
 
-type ConfirmMessageProps = {
+type PropsConfirmMessage = {
   index: number;
 };
 
 type ReturnUseMessengerContract = {
   mining: boolean;
   ownMessages: Message[];
+  messengerContract: ethers.Contract | undefined;
   getOwnMessages: () => void;
-  sendMessage: (props: SendMessageProps) => void;
-  acceptMessage: (props: ConfirmMessageProps) => void;
-  denyMessage: (props: ConfirmMessageProps) => void;
+  sendMessage: (props: PropsSendMessage) => void;
+  acceptMessage: (props: PropsConfirmMessage) => void;
+  denyMessage: (props: PropsConfirmMessage) => void;
 };
 
-type Props = {
+type PropsUseMessengerContract = {
   currentAccount: string | undefined;
 };
 
 export const useMessengerContract = ({
   currentAccount,
-}: Props): ReturnUseMessengerContract => {
+}: PropsUseMessengerContract): ReturnUseMessengerContract => {
   const [mining, setMining] = useState<boolean>(false);
   const [messengerContract, setMessengerContract] = useState<ethers.Contract>();
   const [ownMessages, setOwnMessages] = useState<Message[]>([]);
@@ -92,7 +93,7 @@ export const useMessengerContract = ({
     text,
     receiver,
     tokenInEther,
-  }: SendMessageProps) {
+  }: PropsSendMessage) {
     if (!messengerContract) return;
     try {
       const tokenInWei = ethers.utils.parseEther(tokenInEther);
@@ -115,7 +116,7 @@ export const useMessengerContract = ({
     }
   }
 
-  async function acceptMessage({ index }: ConfirmMessageProps) {
+  async function acceptMessage({ index }: PropsConfirmMessage) {
     if (!messengerContract) return;
     try {
       console.log("call accept with index [%d]", index);
@@ -132,7 +133,7 @@ export const useMessengerContract = ({
     }
   }
 
-  async function denyMessage({ index }: ConfirmMessageProps) {
+  async function denyMessage({ index }: PropsConfirmMessage) {
     if (!messengerContract) return;
     try {
       console.log("call deny with index [%d]", index);
@@ -179,6 +180,7 @@ export const useMessengerContract = ({
       }
     };
 
+    // MessageConfirmedのイベントリスナ
     const onMessageConfirmed = (receiver: BigNumber, index: BigNumber) => {
       console.log(
         "MessageConfirmed index:[%d] receiver: [%s]",
@@ -206,11 +208,12 @@ export const useMessengerContract = ({
         messengerContract.off("MessageConfirmed", onMessageConfirmed);
       }
     };
-  }, [messengerContract]);
+  }, [currentAccount, messengerContract]);
 
   return {
     mining,
     ownMessages,
+    messengerContract,
     getOwnMessages,
     sendMessage,
     acceptMessage,
