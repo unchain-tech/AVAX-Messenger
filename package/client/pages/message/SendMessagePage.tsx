@@ -19,7 +19,15 @@ export default function SendMessagePage() {
         {mining ? (
           <div>mining...</div>
         ) : (
-          <SendMessageForm sendMessage={sendMessage} />
+          <SendMessageForm
+            sendMessage={(
+              text: string,
+              receiver: string,
+              tokenInEther: string
+            ) => {
+              sendMessage({ text, receiver, tokenInEther });
+            }}
+          />
         )}
       </RequireWallet>
     </Layout>

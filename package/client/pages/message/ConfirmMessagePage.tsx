@@ -4,6 +4,7 @@ import RequireWallet from "../../components/layout/RequireWallet";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useWallet } from "../../hooks/useWallet";
 import { useEffect } from "react";
+import { BigNumber } from "ethers";
 
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
@@ -35,9 +36,9 @@ export default function ConfirmMessagePage() {
               <MessageCard
                 message={message}
                 onClickAccept={() => {
-                  acceptMessage({ index });
+                  acceptMessage(BigNumber.from(index));
                 }}
-                onClickDeny={() => denyMessage({ index })}
+                onClickDeny={() => denyMessage(BigNumber.from(index))}
               />
             </div>
           );

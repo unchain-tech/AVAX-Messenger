@@ -20,12 +20,6 @@ type PropsSendMessage = {
   tokenInEther: string;
 };
 
-export type SendMessage = (props: PropsSendMessage) => void;
-//TODO: numberで良いのか, プロップス消す
-type PropsConfirmMessage = {
-  index: number;
-};
-
 type ReturnUseMessengerContract = {
   mining: boolean;
   ownMessages: Message[];
@@ -34,8 +28,8 @@ type ReturnUseMessengerContract = {
   numOfPendingLimits: BigNumber | undefined;
   getOwnMessages: () => void;
   sendMessage: (props: PropsSendMessage) => void;
-  acceptMessage: (props: PropsConfirmMessage) => void;
-  denyMessage: (props: PropsConfirmMessage) => void;
+  acceptMessage: (index: BigNumber) => void;
+  denyMessage: (index: BigNumber) => void;
   getOwner: () => void;
   getNumOfPendingLimits: () => void;
   changeNumOfPendingLimits: (limits: BigNumber) => void;
@@ -121,7 +115,7 @@ export const useMessengerContract = ({
     }
   }
 
-  async function acceptMessage({ index }: PropsConfirmMessage) {
+  async function acceptMessage(index: BigNumber) {
     if (!messengerContract) return;
     try {
       console.log("call accept with index [%d]", index);
@@ -138,7 +132,7 @@ export const useMessengerContract = ({
     }
   }
 
-  async function denyMessage({ index }: PropsConfirmMessage) {
+  async function denyMessage(index: BigNumber) {
     if (!messengerContract) return;
     try {
       console.log("call deny with index [%d]", index);

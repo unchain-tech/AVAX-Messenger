@@ -1,10 +1,8 @@
-import { SendMessage } from "../../hooks/useMessengerContract";
 import styles from "./Form.module.css";
 import { useState } from "react";
 
-// TODO: やっぱりsendMessage使うのやメルカ
 type Props = {
-  sendMessage: SendMessage;
+  sendMessage: (text: string, receiver: string, tokenInEther: string) => void;
 };
 
 export default function SendMessageForm({ sendMessage }: Props) {
@@ -45,11 +43,7 @@ export default function SendMessageForm({ sendMessage }: Props) {
         <div className={styles.button}>
           <button
             onClick={() => {
-              sendMessage({
-                text: textValue,
-                receiver: receiverAccountValue,
-                tokenInEther: tokenValue,
-              });
+              sendMessage(textValue, receiverAccountValue, tokenValue);
             }}
           >
             send{" "}
