@@ -1,5 +1,5 @@
 import { SendMessage } from "../../hooks/useMessengerContract";
-import styles from "./SendMessageForm.module.css";
+import styles from "./Form.module.css";
 import { useState } from "react";
 
 type Props = {

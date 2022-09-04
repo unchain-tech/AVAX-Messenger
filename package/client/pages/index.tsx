@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import styles from "./Home.module.css";
+import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import RequireWallet from "../components/layout/RequireWallet";
 import Layout from "../components/layout/Layout";
