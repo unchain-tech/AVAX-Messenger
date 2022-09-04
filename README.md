@@ -2,6 +2,8 @@
 
 `Messenger` is a message dapp that allows text and tokens (AVAX) to be exchanged.
 
+![](/public/images/dapp.gif)
+
 # build & run
 
 ```
