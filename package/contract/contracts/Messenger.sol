@@ -62,7 +62,7 @@ contract Messenger is Ownable {
         // 保留中のメッセージの数をインクリメントします。
         numOfPendingAtAddress[_receiver] += 1;
 
-        console.log("%s posts [%s] with %s avax", msg.sender, _text, msg.value);
+        console.log("%s posts [%s] with %s AVAX", msg.sender, _text, msg.value);
 
         messagesAtAddress[_receiver].push(
             Message(

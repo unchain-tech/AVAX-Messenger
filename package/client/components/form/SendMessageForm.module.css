@@ -24,19 +24,29 @@
   margin-top: 10px;
 }
 
-.input_container {
+.form input {
+  border-radius: 10px;
   margin-top:30px;
 }
 
-.input_container input {
+.form textarea.text {
   border-radius: 10px;
+  margin-top:30px;
+  width: 330px;
+  height: 100px;
 }
 
-.input_container textarea {
-  border-radius: 10px;
+.form input.address {
+  width: 330px;
+  height: 40px;
 }
 
-.input_container ::placeholder {
+.form input.avax {
+  width: 80px;
+  height: 40px;
+}
+
+.form ::placeholder {
   font-size: 18px;
   padding: 0 0 0 5px;
 }
@@ -45,19 +55,3 @@
   margin-top:20px;
   text-align: center;
 }
-
-textarea.text {
-  width: 330px;
-  height: 100px;
-}
-
-input.address {
-  width: 330px;
-  height: 40px;
-}
-
-input.avax {
-  width: 80px;
-  height: 40px;
-}
-

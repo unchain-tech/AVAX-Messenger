@@ -15,41 +15,34 @@ export default function SendMessageForm({ sendMessage }: Props) {
     <div className={styles.container}>
       <div className={styles.form}>
         <div className={styles.title}>Send your message !</div>
-        <div className={styles.input_container}>
-          <textarea
-            name="text"
-            placeholder="text"
-            id="input_text"
-            onChange={(e) => setTextValue(e.target.value)}
-            className={styles.text}
-          />
-        </div>
+        <textarea
+          name="text"
+          placeholder="text"
+          id="input_text"
+          onChange={(e) => setTextValue(e.target.value)}
+          className={styles.text}
+        />
 
-        <div className={styles.input_container}>
-          <input
-            name="address"
-            placeholder="receiver address: 0x..."
-            id="input_address"
-            className={styles.address}
-            onChange={(e) => setReceiverAccountValue(e.target.value)}
-          />
-        </div>
+        <input
+          name="address"
+          placeholder="receiver address: 0x..."
+          id="input_address"
+          className={styles.address}
+          onChange={(e) => setReceiverAccountValue(e.target.value)}
+        />
 
-        <div className={styles.input_container}>
-          <input
-            type="number"
-            name="avax"
-            placeholder="avax"
-            id="input_avax"
-            min={0}
-            className={styles.avax}
-            onChange={(e) => setTokenValue(e.target.value)}
-          />
-        </div>
+        <input
+          type="number"
+          name="avax"
+          placeholder="AVAX"
+          id="input_avax"
+          min={0}
+          className={styles.avax}
+          onChange={(e) => setTokenValue(e.target.value)}
+        />
 
         <div className={styles.button}>
           <button
-            className="SendMessageButton"
             onClick={() => {
               sendMessage({
                 text: textValue,
