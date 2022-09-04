@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 import abi from "../utils/Messenger.json";
 
-const contractAddress = "0xa725B1bE9c6b43A66962B7047508AcfaFD2C76aC";
+const contractAddress = "0x226fc34e54cdc0a27C4E6B93a7e6D6d5c38dc4B4";
 const contractABI = abi.abi;
 
 export type Message = {
@@ -233,10 +233,23 @@ export const useMessengerContract = ({
       }
     };
 
+    // NumOfPendingLimitsChangedのイベントリスナ
+    const onNumOfPendingLimitsChanged = (limitsChanged: BigNumber) => {
+      console.log(
+        "NumOfPendingLimitsChanged limits:[%d]",
+        limitsChanged.toNumber()
+      );
+      setNumOfPendingLimits(limitsChanged);
+    };
+
     /* イベントリスナーの登録をします */
     if (messengerContract) {
       messengerContract.on("NewMessage", onNewMessage);
       messengerContract.on("MessageConfirmed", onMessageConfirmed);
+      messengerContract.on(
+        "NumOfPendingLimitsChanged",
+        onNumOfPendingLimitsChanged
+      );
     }
 
     /* イベントリスナーの登録を解除します */
@@ -244,6 +257,10 @@ export const useMessengerContract = ({
       if (messengerContract) {
         messengerContract.off("NewMessage", onNewMessage);
         messengerContract.off("MessageConfirmed", onMessageConfirmed);
+        messengerContract.off(
+          "NumOfPendingLimitsChanged",
+          onNumOfPendingLimitsChanged
+        );
       }
     };
   }, [currentAccount, messengerContract]);
