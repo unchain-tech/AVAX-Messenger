@@ -3,6 +3,7 @@ import RequireWallet from "../../components/layout/RequireWallet";
 import { useWallet } from "../../hooks/useWallet";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useEffect } from "react";
+import Error from "../../components/error/Error";
 
 export default function OwnerPage() {
   const { currentAccount, connectWallet } = useWallet();
@@ -30,7 +31,7 @@ export default function OwnerPage() {
         {owner === currentAccount ? (
           <div>numOfPendingLimits: {numOfPendingLimits?.toNumber()}</div>
         ) : (
-          <div>this page only owner</div>
+          <Error statusCode={404} />
         )}
       </RequireWallet>
     </Layout>

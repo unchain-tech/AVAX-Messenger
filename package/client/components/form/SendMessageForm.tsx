@@ -47,7 +47,7 @@ export default function SendMessageForm({ sendMessage }: Props) {
           />
         </div>
 
-        <div className={styles.button_container}>
+        <div className={styles.button}>
           <button
             className="SendMessageButton"
             onClick={() => {
