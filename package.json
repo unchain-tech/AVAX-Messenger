@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cd package/contract && npx hardhat test",
+    "deploy": "cd package/contract && npx hardhat run scripts/deploy.ts --network fuji",
     "dev": "npm run dev -w package/client"
   },
   "repository": {

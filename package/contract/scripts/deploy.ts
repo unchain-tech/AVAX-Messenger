@@ -8,7 +8,6 @@ async function deploy() {
 
   const numOfPendingLimits = 10;
   const funds = 100;
-  //const funds = ethers.utils.parseEther("1");
 
   // コントラクトのインスタンスを作成します。
   const Messenger = await ethers.getContractFactory("Messenger");
@@ -17,7 +16,6 @@ async function deploy() {
   const messenger = await Messenger.deploy(numOfPendingLimits, {
     value: funds,
   } as Overrides);
-  //const messenger = await Messenger.deploy(numOfPendingLimits);
 
   await messenger.deployed();
 

@@ -53,6 +53,15 @@ describe("Messenger", function () {
       await messenger.changeNumOfPendingLimits(newLimits);
       expect(await messenger.numOfPendingLimits()).to.equal(newLimits);
     });
+
+    it("Should emit an event on change limits", async function () {
+      const { messenger } = await loadFixture(deployContract);
+
+      await expect(messenger.changeNumOfPendingLimits(10)).to.emit(
+        messenger,
+        "NumOfPendingLimitsChanged"
+      );
+    });
   });
 
   describe("Post", function () {

@@ -34,6 +34,7 @@ contract Messenger is Ownable {
     );
 
     event MessageConfirmed(address receiver, uint256 index);
+    event NumOfPendingLimitsChanged(uint256 limits);
 
     constructor(uint256 _numOfPendingLimits) payable {
         console.log("Here is my first smart contract!");
@@ -44,8 +45,9 @@ contract Messenger is Ownable {
     }
 
     // ownerのみこの関数を実行できるように修飾子を利用します。
-    function changeNumOfPendingLimits(uint256 _limit) external onlyOwner {
-        numOfPendingLimits = _limit;
+    function changeNumOfPendingLimits(uint256 _limits) external onlyOwner {
+        numOfPendingLimits = _limits;
+        emit NumOfPendingLimitsChanged(numOfPendingLimits);
     }
 
     // ユーザからメッセージを受け取り, 状態変数に格納します。

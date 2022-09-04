@@ -5,6 +5,10 @@ import * as dotenv from "dotenv";
 // .envファイルから環境変数をロードします。
 dotenv.config();
 
+if (process.env.TEST_ACCOUNT_PRIVATE_KEY === undefined) {
+  console.log("private key is missing");
+}
+
 const config: HardhatUserConfig = {
   solidity: "0.8.9",
   networks: {
