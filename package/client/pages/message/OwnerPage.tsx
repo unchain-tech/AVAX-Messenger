@@ -4,15 +4,18 @@ import { useWallet } from "../../hooks/useWallet";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
 import { useEffect } from "react";
 import Error from "../../components/error/Error";
+import ChangeLimitsForm from "../../components/form/ChangeLimitsForm";
 
 export default function OwnerPage() {
   const { currentAccount, connectWallet } = useWallet();
   const {
+    mining,
     messengerContract,
     owner,
     numOfPendingLimits,
     getOwner,
     getNumOfPendingLimits,
+    changeNumOfPendingLimits,
   } = useMessengerContract({
     currentAccount: currentAccount,
   });
@@ -29,7 +32,12 @@ export default function OwnerPage() {
         connectWallet={connectWallet}
       >
         {owner === currentAccount ? (
-          <div>numOfPendingLimits: {numOfPendingLimits?.toNumber()}</div>
+          <ChangeLimitsForm
+            mining={mining}
+            currentLimits={numOfPendingLimits}
+            getLimits={getNumOfPendingLimits}
+            changeLimits={changeNumOfPendingLimits}
+          />
         ) : (
           <Error statusCode={404} />
         )}

@@ -2,6 +2,7 @@ import { SendMessage } from "../../hooks/useMessengerContract";
 import styles from "./Form.module.css";
 import { useState } from "react";
 
+// TODO: やっぱりsendMessage使うのやメルカ
 type Props = {
   sendMessage: SendMessage;
 };

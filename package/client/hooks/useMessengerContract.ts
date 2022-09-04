@@ -21,7 +21,7 @@ type PropsSendMessage = {
 };
 
 export type SendMessage = (props: PropsSendMessage) => void;
-
+//TODO: numberで良いのか, プロップス消す
 type PropsConfirmMessage = {
   index: number;
 };
@@ -38,6 +38,7 @@ type ReturnUseMessengerContract = {
   denyMessage: (props: PropsConfirmMessage) => void;
   getOwner: () => void;
   getNumOfPendingLimits: () => void;
+  changeNumOfPendingLimits: (limits: BigNumber) => void;
 };
 
 type PropsUseMessengerContract = {
@@ -176,6 +177,23 @@ export const useMessengerContract = ({
     }
   }
 
+  async function changeNumOfPendingLimits(limits: BigNumber) {
+    if (!messengerContract) return;
+    try {
+      console.log("call changeNumOfPendingLimits with [%d]", limits.toNumber());
+      const txn = await messengerContract.changeNumOfPendingLimits(limits, {
+        gasLimit: 300000,
+      });
+      console.log("Mining...", txn.hash);
+      setMining(true);
+      await txn.wait();
+      console.log("Mined -- ", txn.hash);
+      setMining(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getMessengerContract();
   }, [currentAccount]);
@@ -248,5 +266,6 @@ export const useMessengerContract = ({
     denyMessage,
     getOwner,
     getNumOfPendingLimits,
+    changeNumOfPendingLimits,
   };
 };
