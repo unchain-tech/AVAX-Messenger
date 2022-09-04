@@ -38,7 +38,7 @@ export default function SendMessageForm({ sendMessage }: Props) {
           placeholder="AVAX"
           id="input_avax"
           min={0}
-          className={styles.avax}
+          className={styles.number}
           onChange={(e) => setTokenValue(e.target.value)}
         />
 

@@ -4,16 +4,16 @@ import { useState } from "react";
 
 type Props = {
   mining: boolean;
-  currentLimits: BigNumber | undefined;
-  getLimits: () => void;
-  changeLimits: (limits: BigNumber) => void;
+  currentValue: BigNumber | undefined;
+  getValue: () => void;
+  changeValue: (limits: BigNumber) => void;
 };
-//TODO: avaxというクラス名を変える
-export default function ChangeLimitsForm({
+
+export default function ChangeOwnerValueForm({
   mining,
-  currentLimits,
-  getLimits,
-  changeLimits,
+  currentValue: currentLimits,
+  getValue: getLimits,
+  changeValue: changeValue,
 }: Props) {
   const [limits, setLimits] = useState<string>("0");
 
@@ -31,19 +31,19 @@ export default function ChangeLimitsForm({
 
         <input
           type="number"
-          name="avax"
+          name="limits_number"
           placeholder="limits"
-          id="input_avax"
+          id="input_limits"
           min={0}
           defaultValue={currentLimits?.toString()}
-          className={styles.avax}
+          className={styles.number}
           onChange={(e) => setLimits(e.target.value)}
         />
 
         <div className={styles.button}>
           <button
             onClick={() => {
-              changeLimits(BigNumber.from(limits));
+              changeValue(BigNumber.from(limits));
               getLimits();
             }}
           >
