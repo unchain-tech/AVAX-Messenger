@@ -15,6 +15,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     getOwner();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messengerContract]);
 
   return (

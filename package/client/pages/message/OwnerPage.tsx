@@ -23,6 +23,7 @@ export default function OwnerPage() {
   useEffect(() => {
     getOwner();
     getNumOfPendingLimits();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messengerContract]);
 
   return (

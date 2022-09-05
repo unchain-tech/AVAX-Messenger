@@ -21,6 +21,7 @@ export default function ConfirmMessagePage() {
 
   useEffect(() => {
     getOwnMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messengerContract]);
 
   return (
