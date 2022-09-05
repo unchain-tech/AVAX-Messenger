@@ -11,7 +11,7 @@ export default function Layout({ children, home }: Props) {
   return (
     <div className={styles.container}>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
         <meta
           name="description"
           content="It is a message dapp that exchanges text and AVAX"
