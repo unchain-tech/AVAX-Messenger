@@ -97,7 +97,7 @@ contract Messenger is Ownable {
         //指定インデックスのメッセージを確認します。
         confirmMessage(_index);
 
-        Message memory message = accessMessageSafety(msg.sender, _index);
+        Message memory message = messagesAtAddress[msg.sender][_index];
 
         // メッセージの受取人にavaxを送信します。
         sendAvax(message.receiver, message.depositInWei);
@@ -109,7 +109,7 @@ contract Messenger is Ownable {
     function deny(uint256 _index) public payable {
         confirmMessage(_index);
 
-        Message memory message = accessMessageSafety(msg.sender, _index);
+        Message memory message = messagesAtAddress[msg.sender][_index];
 
         // メッセージの送信者にavaxを返却します。
         sendAvax(message.sender, message.depositInWei);
@@ -118,7 +118,7 @@ contract Messenger is Ownable {
     }
 
     function confirmMessage(uint256 _index) private {
-        Message storage message = accessMessageSafety(msg.sender, _index);
+        Message storage message = messagesAtAddress[msg.sender][_index];
 
         // 関数を呼び出したアドレスとメッセージの受取人アドレスが同じか確認します。
         require(
@@ -137,21 +137,6 @@ contract Messenger is Ownable {
 
         // ユーザの保留中のメッセージの数をデクリメントします。
         numOfPendingAtAddress[message.receiver] -= 1;
-    }
-
-    // indexの範囲をチェックした上でMessage[]にアクセスします。
-    function accessMessageSafety(address _receiver, uint256 _index)
-        private
-        view
-        returns (Message storage)
-    {
-        // 指定インデックスが配列の範囲を超えていないか確認します。
-        require(
-            _index < messagesAtAddress[_receiver].length,
-            "Index is out of range"
-        );
-
-        return messagesAtAddress[_receiver][_index];
     }
 
     function sendAvax(address payable _to, uint256 _amountInWei) private {
