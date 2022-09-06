@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 import abi from "../utils/Messenger.json";
 import { getEthereum } from "../utils/ethereum";
+import { Messenger as MessengerType } from "../typechain-types";
+import { NewMessageEvent as NewMessageType } from "../typechain-types/Messenger";
 
 const contractAddress = "0x226fc34e54cdc0a27C4E6B93a7e6D6d5c38dc4B4";
 const contractABI = abi.abi;
@@ -24,7 +26,7 @@ type PropsSendMessage = {
 type ReturnUseMessengerContract = {
   processing: boolean;
   ownMessages: Message[];
-  messengerContract: ethers.Contract | undefined;
+  messengerContract: MessengerType | undefined;
   owner: string | undefined;
   numOfPendingLimits: BigNumber | undefined;
   getOwnMessages: () => void;
@@ -44,7 +46,7 @@ export const useMessengerContract = ({
   currentAccount,
 }: PropsUseMessengerContract): ReturnUseMessengerContract => {
   const [processing, setProcessing] = useState<boolean>(false);
-  const [messengerContract, setMessengerContract] = useState<ethers.Contract>();
+  const [messengerContract, setMessengerContract] = useState<MessengerType>();
   const [ownMessages, setOwnMessages] = useState<Message[]>([]);
   const [owner, setOwner] = useState<string>();
   const [numOfPendingLimits, setNumOfPendingLimits] = useState<BigNumber>();
@@ -60,7 +62,7 @@ export const useMessengerContract = ({
           contractAddress,
           contractABI,
           signer
-        );
+        ) as MessengerType;
         setMessengerContract(MessengerContract);
       } else {
         console.log("Ethereum object doesn't exist!");
@@ -74,14 +76,14 @@ export const useMessengerContract = ({
     if (!messengerContract) return;
     try {
       const OwnMessages = await messengerContract.getOwnMessages();
-      const messagesCleaned: Message[] = OwnMessages.map((message: any) => {
+      const messagesCleaned: Message[] = OwnMessages.map((message) => {
         return {
           depositInWei: message.depositInWei,
           timestamp: new Date(message.timestamp.toNumber() * 1000),
           text: message.text,
           isPending: message.isPending,
-          sender: message.sender.toString(),
-          receiver: message.receiver.toString(),
+          sender: message.sender,
+          receiver: message.receiver,
         };
       });
       setOwnMessages(messagesCleaned);
