@@ -4,16 +4,16 @@ import abi from "../utils/Messenger.json";
 import { getEthereum } from "../utils/ethereum";
 import { Messenger as MessengerType } from "../typechain-types";
 
-const contractAddress = "0x226fc34e54cdc0a27C4E6B93a7e6D6d5c38dc4B4";
+const contractAddress = "0x8d802812CB9C744eFA5725dCfF21e272c3019310";
 const contractABI = abi.abi;
 
 export type Message = {
+  sender: string;
+  receiver: string;
   depositInWei: BigNumber;
   timestamp: Date;
   text: string;
   isPending: boolean;
-  sender: string;
-  receiver: string;
 };
 
 type PropsSendMessage = {
@@ -74,12 +74,12 @@ export const useMessengerContract = ({
       const OwnMessages = await messengerContract.getOwnMessages();
       const messagesCleaned: Message[] = OwnMessages.map((message) => {
         return {
+          sender: message.sender,
+          receiver: message.receiver,
           depositInWei: message.depositInWei,
           timestamp: new Date(message.timestamp.toNumber() * 1000),
           text: message.text,
           isPending: message.isPending,
-          sender: message.sender,
-          receiver: message.receiver,
         };
       });
       setOwnMessages(messagesCleaned);
@@ -108,7 +108,7 @@ export const useMessengerContract = ({
       console.log("Processing...", txn.hash);
       setProcessing(true);
       await txn.wait();
-      console.log("Mined -- ", txn.hash);
+      console.log("Done -- ", txn.hash);
       setProcessing(false);
     } catch (error) {
       console.log(error);
@@ -125,7 +125,7 @@ export const useMessengerContract = ({
       console.log("Processing...", txn.hash);
       setProcessing(true);
       await txn.wait();
-      console.log("Mined -- ", txn.hash);
+      console.log("Done -- ", txn.hash);
       setProcessing(false);
     } catch (error) {
       console.log(error);
@@ -142,7 +142,7 @@ export const useMessengerContract = ({
       console.log("Processing...", txn.hash);
       setProcessing(true);
       await txn.wait();
-      console.log("Mined -- ", txn.hash);
+      console.log("Done -- ", txn.hash);
       setProcessing(false);
     } catch (error) {
       console.log(error);
@@ -181,7 +181,7 @@ export const useMessengerContract = ({
       console.log("Processing...", txn.hash);
       setProcessing(true);
       await txn.wait();
-      console.log("Mined -- ", txn.hash);
+      console.log("Done -- ", txn.hash);
       setProcessing(false);
     } catch (error) {
       console.log(error);
@@ -202,15 +202,15 @@ export const useMessengerContract = ({
   useEffect(() => {
     // NewMessageのイベントリスナ
     const onNewMessage = (
+      sender: string,
+      receiver: string,
       depositInWei: BigNumber,
       timestamp: BigNumber,
       text: string,
-      isPending: boolean,
-      sender: BigNumber, // stringではログの出力がされずイベントリスナが動いていないと判断
-      receiver: BigNumber // stringではログの出力がされずイベントリスナが動いていないと判断
+      isPending: boolean
     ) => {
-      console.log("NewMessage from %s", sender.toString());
-      if (receiver.toString().toLocaleLowerCase() === currentAccount) {
+      console.log("NewMessage from %s", sender);
+      if (receiver.toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => [
           ...prevState,
           {
@@ -218,21 +218,21 @@ export const useMessengerContract = ({
             timestamp: new Date(timestamp.toNumber() * 1000),
             text: text,
             isPending: isPending,
-            sender: sender.toString(),
-            receiver: receiver.toString(),
+            sender: sender,
+            receiver: receiver,
           },
         ]);
       }
     };
 
     // MessageConfirmedのイベントリスナ
-    const onMessageConfirmed = (receiver: BigNumber, index: BigNumber) => {
+    const onMessageConfirmed = (receiver: string, index: BigNumber) => {
       console.log(
         "MessageConfirmed index:[%d] receiver: [%s]",
         index.toNumber(),
-        receiver.toString()
+        receiver
       );
-      if (receiver.toString().toLocaleLowerCase() === currentAccount) {
+      if (receiver.toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => {
           prevState[index.toNumber()].isPending = false;
           return [...prevState];
