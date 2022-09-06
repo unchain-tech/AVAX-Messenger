@@ -193,6 +193,9 @@ export const useMessengerContract = ({
     getOwnMessages();
     getOwner();
     getNumOfPendingLimits();
+    // getOwnMessages()の実行はメッセージ一覧が必要なページでのみ必要だが処理が楽なのでここで実行。
+    // 例えば, ownMessagesをインデックスアクセスにより変更するようなイベントリスナーがある場合
+    // ページの切り替わりなどでownMessagesが空になったタイミングでそのイベントリスナーが動くと条件分岐が面倒。
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAccount, ethereum]);
 
