@@ -1,28 +1,7 @@
 import { useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 import abi from "../utils/Messenger.json";
-
-/* ----- */
-import { MetaMaskInpageProvider as MetaMaskinpageProviderType } from "@metamask/providers";
-
-export type EthereumType = MetaMaskinpageProviderType;
-
-import { MetaMaskInpageProvider } from "@metamask/providers";
-
-declare global {
-  interface Window {
-    ethereum?: MetaMaskInpageProvider;
-  }
-}
-
-export const getEthereumSafety = (): EthereumType | null => {
-  if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-    const { ethereum } = window;
-    return ethereum;
-  }
-  return null;
-};
-/* ----- */
+import { getEthereum } from "../utils/ethereum";
 
 const contractAddress = "0x226fc34e54cdc0a27C4E6B93a7e6D6d5c38dc4B4";
 const contractABI = abi.abi;
@@ -69,11 +48,12 @@ export const useMessengerContract = ({
   const [ownMessages, setOwnMessages] = useState<Message[]>([]);
   const [owner, setOwner] = useState<string>();
   const [numOfPendingLimits, setNumOfPendingLimits] = useState<BigNumber>();
+  const ethereum = getEthereum();
 
   function getMessengerContract() {
     try {
-      const ethereum = getEthereumSafety();
       if (ethereum) {
+        // @ts-ignore: ethereum as ethers.providers.ExternalProvider
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const MessengerContract = new ethers.Contract(
@@ -212,7 +192,8 @@ export const useMessengerContract = ({
 
   useEffect(() => {
     getMessengerContract();
-  }, [currentAccount]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentAccount, ethereum]);
 
   useEffect(() => {
     // NewMessageのイベントリスナ
@@ -285,7 +266,8 @@ export const useMessengerContract = ({
         );
       }
     };
-  }, [currentAccount, messengerContract]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messengerContract]);
 
   return {
     processing,
