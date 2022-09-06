@@ -3,7 +3,6 @@ import { BigNumber, ethers } from "ethers";
 import abi from "../utils/Messenger.json";
 import { getEthereum } from "../utils/ethereum";
 import { Messenger as MessengerType } from "../typechain-types";
-import { NewMessageEvent as NewMessageType } from "../typechain-types/Messenger";
 
 const contractAddress = "0x226fc34e54cdc0a27C4E6B93a7e6D6d5c38dc4B4";
 const contractABI = abi.abi;
