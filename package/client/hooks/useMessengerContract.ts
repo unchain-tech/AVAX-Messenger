@@ -203,8 +203,8 @@ export const useMessengerContract = ({
       timestamp: BigNumber,
       text: string,
       isPending: boolean,
-      sender: BigNumber,
-      receiver: BigNumber
+      sender: BigNumber, // stringではログの出力がされずイベントリスナが動いていないと判断
+      receiver: BigNumber // stringではログの出力がされずイベントリスナが動いていないと判断
     ) => {
       console.log("NewMessage from %s", sender.toString());
       if (receiver.toString().toLocaleLowerCase() === currentAccount) {
