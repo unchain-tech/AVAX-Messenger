@@ -10,7 +10,7 @@ export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
   const {
     ownMessages,
-    mining,
+    processing,
     messengerContract,
     getOwnMessages,
     acceptMessage,
@@ -30,7 +30,7 @@ export default function ConfirmMessagePage() {
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
-        {mining && <div>mining...</div>}
+        {processing && <div>processing...</div>}
         {ownMessages.map((message, index) => {
           return (
             <div key={index}>

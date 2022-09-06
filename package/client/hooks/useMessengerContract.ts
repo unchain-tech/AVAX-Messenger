@@ -21,7 +21,7 @@ type PropsSendMessage = {
 };
 
 type ReturnUseMessengerContract = {
-  mining: boolean;
+  processing: boolean;
   ownMessages: Message[];
   messengerContract: ethers.Contract | undefined;
   owner: string | undefined;
@@ -42,7 +42,7 @@ type PropsUseMessengerContract = {
 export const useMessengerContract = ({
   currentAccount,
 }: PropsUseMessengerContract): ReturnUseMessengerContract => {
-  const [mining, setMining] = useState<boolean>(false);
+  const [processing, setProcessing] = useState<boolean>(false);
   const [messengerContract, setMessengerContract] = useState<ethers.Contract>();
   const [ownMessages, setOwnMessages] = useState<Message[]>([]);
   const [owner, setOwner] = useState<string>();
@@ -105,11 +105,11 @@ export const useMessengerContract = ({
         gasLimit: 300000,
         value: tokenInWei,
       });
-      console.log("Mining...", txn.hash);
-      setMining(true);
+      console.log("Processing...", txn.hash);
+      setProcessing(true);
       await txn.wait();
       console.log("Mined -- ", txn.hash);
-      setMining(false);
+      setProcessing(false);
     } catch (error) {
       console.log(error);
     }
@@ -122,11 +122,11 @@ export const useMessengerContract = ({
       const txn = await messengerContract.accept(index, {
         gasLimit: 300000,
       });
-      console.log("Mining...", txn.hash);
-      setMining(true);
+      console.log("Processing...", txn.hash);
+      setProcessing(true);
       await txn.wait();
       console.log("Mined -- ", txn.hash);
-      setMining(false);
+      setProcessing(false);
     } catch (error) {
       console.log(error);
     }
@@ -139,11 +139,11 @@ export const useMessengerContract = ({
       const txn = await messengerContract.deny(index, {
         gasLimit: 300000,
       });
-      console.log("Mining...", txn.hash);
-      setMining(true);
+      console.log("Processing...", txn.hash);
+      setProcessing(true);
       await txn.wait();
       console.log("Mined -- ", txn.hash);
-      setMining(false);
+      setProcessing(false);
     } catch (error) {
       console.log(error);
     }
@@ -178,11 +178,11 @@ export const useMessengerContract = ({
       const txn = await messengerContract.changeNumOfPendingLimits(limits, {
         gasLimit: 300000,
       });
-      console.log("Mining...", txn.hash);
-      setMining(true);
+      console.log("Processing...", txn.hash);
+      setProcessing(true);
       await txn.wait();
       console.log("Mined -- ", txn.hash);
-      setMining(false);
+      setProcessing(false);
     } catch (error) {
       console.log(error);
     }
@@ -266,7 +266,7 @@ export const useMessengerContract = ({
   }, [currentAccount, messengerContract]);
 
   return {
-    mining,
+    processing,
     ownMessages,
     messengerContract,
     owner,

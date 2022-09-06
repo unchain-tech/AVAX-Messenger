@@ -3,14 +3,14 @@ import { BigNumber } from "ethers";
 import { useState } from "react";
 
 type Props = {
-  mining: boolean;
+  processing: boolean;
   currentValue: BigNumber | undefined;
   getValue: () => void;
   changeValue: (limits: BigNumber) => void;
 };
 
 export default function ChangeOwnerValueForm({
-  mining,
+  processing,
   currentValue: currentLimits,
   getValue: getLimits,
   changeValue: changeValue,
@@ -23,8 +23,8 @@ export default function ChangeOwnerValueForm({
         <div className={styles.title}>
           Change number of pending messages limits !
         </div>
-        {mining ? (
-          <p>mining...</p>
+        {processing ? (
+          <p>processing...</p>
         ) : (
           <p>current limits: {currentLimits?.toNumber()}</p>
         )}

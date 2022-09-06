@@ -6,7 +6,7 @@ import SendMessageForm from "../../components/form/SendMessageForm";
 
 export default function SendMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
-  const { mining, sendMessage } = useMessengerContract({
+  const { processing, sendMessage } = useMessengerContract({
     currentAccount: currentAccount,
   });
 
@@ -16,8 +16,8 @@ export default function SendMessagePage() {
         currentAccount={currentAccount}
         connectWallet={connectWallet}
       >
-        {mining ? (
-          <div>mining...</div>
+        {processing ? (
+          <div>processing...</div>
         ) : (
           <SendMessageForm
             sendMessage={(

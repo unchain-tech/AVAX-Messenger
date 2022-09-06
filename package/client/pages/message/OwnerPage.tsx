@@ -9,7 +9,7 @@ import ChangeOwnerValueForm from "../../components/form/ChangeOwnerValueForm";
 export default function OwnerPage() {
   const { currentAccount, connectWallet } = useWallet();
   const {
-    mining,
+    processing,
     messengerContract,
     owner,
     numOfPendingLimits,
@@ -34,7 +34,7 @@ export default function OwnerPage() {
       >
         {owner === currentAccount ? (
           <ChangeOwnerValueForm
-            mining={mining}
+            processing={processing}
             currentValue={numOfPendingLimits}
             getValue={getNumOfPendingLimits}
             changeValue={changeNumOfPendingLimits}
