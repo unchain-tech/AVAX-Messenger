@@ -25,14 +25,11 @@ type PropsSendMessage = {
 type ReturnUseMessengerContract = {
   processing: boolean;
   ownMessages: Message[];
-  messengerContract: MessengerType | undefined;
   owner: string | undefined;
   numOfPendingLimits: BigNumber | undefined;
-  getOwnMessages: () => void;
   sendMessage: (props: PropsSendMessage) => void;
   acceptMessage: (index: BigNumber) => void;
   denyMessage: (index: BigNumber) => void;
-  getOwner: () => void;
   getNumOfPendingLimits: () => void;
   changeNumOfPendingLimits: (limits: BigNumber) => void;
 };
@@ -193,6 +190,9 @@ export const useMessengerContract = ({
 
   useEffect(() => {
     getMessengerContract();
+    getOwnMessages();
+    getOwner();
+    getNumOfPendingLimits();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAccount, ethereum]);
 
@@ -273,14 +273,11 @@ export const useMessengerContract = ({
   return {
     processing,
     ownMessages,
-    messengerContract,
     owner,
     numOfPendingLimits,
-    getOwnMessages,
     sendMessage,
     acceptMessage,
     denyMessage,
-    getOwner,
     getNumOfPendingLimits,
     changeNumOfPendingLimits,
   };

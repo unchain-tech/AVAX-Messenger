@@ -5,18 +5,12 @@ import RequireWallet from "../components/layout/RequireWallet";
 import Layout from "../components/layout/Layout";
 import { useWallet } from "../hooks/useWallet";
 import { useMessengerContract } from "../hooks/useMessengerContract";
-import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const { currentAccount, connectWallet } = useWallet();
-  const { messengerContract, owner, getOwner } = useMessengerContract({
+  const { owner } = useMessengerContract({
     currentAccount: currentAccount,
   });
-
-  useEffect(() => {
-    getOwner();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messengerContract]);
 
   return (
     <Layout home>

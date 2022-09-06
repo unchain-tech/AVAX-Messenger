@@ -2,7 +2,6 @@ import Layout from "../../components/layout/Layout";
 import RequireWallet from "../../components/layout/RequireWallet";
 import { useWallet } from "../../hooks/useWallet";
 import { useMessengerContract } from "../../hooks/useMessengerContract";
-import { useEffect } from "react";
 import Error from "../../components/error/Error";
 import ChangeOwnerValueForm from "../../components/form/ChangeOwnerValueForm";
 
@@ -10,21 +9,13 @@ export default function OwnerPage() {
   const { currentAccount, connectWallet } = useWallet();
   const {
     processing,
-    messengerContract,
     owner,
     numOfPendingLimits,
-    getOwner,
     getNumOfPendingLimits,
     changeNumOfPendingLimits,
   } = useMessengerContract({
     currentAccount: currentAccount,
   });
-
-  useEffect(() => {
-    getOwner();
-    getNumOfPendingLimits();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messengerContract]);
 
   return (
     <Layout>
