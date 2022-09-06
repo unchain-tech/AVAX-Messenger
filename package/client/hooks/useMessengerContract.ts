@@ -214,12 +214,12 @@ export const useMessengerContract = ({
         setOwnMessages((prevState) => [
           ...prevState,
           {
+            sender: sender,
+            receiver: receiver,
             depositInWei: depositInWei,
             timestamp: new Date(timestamp.toNumber() * 1000),
             text: text,
             isPending: isPending,
-            sender: sender,
-            receiver: receiver,
           },
         ]);
       }
