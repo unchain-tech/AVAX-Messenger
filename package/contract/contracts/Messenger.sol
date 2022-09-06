@@ -11,12 +11,12 @@ contract Messenger is Ownable {
 
     // メッセージ情報を定義します。
     struct Message {
+        address payable sender;
+        address payable receiver;
         uint256 depositInWei;
         uint256 timestamp;
         string text;
         bool isPending;
-        address payable sender;
-        address payable receiver;
     }
 
     // メッセージの受取人アドレスをkeyにメッセージを保存します。
@@ -25,12 +25,12 @@ contract Messenger is Ownable {
     mapping(address => uint256) private numOfPendingAtAddress;
 
     event NewMessage(
+        address sender,
+        address receiver,
         uint256 depositInWei,
         uint256 timestamp,
         string text,
-        bool isPending,
-        address sender,
-        address receiver
+        bool isPending
     );
 
     event MessageConfirmed(address receiver, uint256 index);
@@ -73,22 +73,22 @@ contract Messenger is Ownable {
 
         messagesAtAddress[_receiver].push(
             Message(
+                payable(msg.sender),
+                _receiver,
                 msg.value,
                 block.timestamp,
                 _text,
-                true,
-                payable(msg.sender),
-                _receiver
+                true
             )
         );
 
         emit NewMessage(
+            msg.sender,
+            _receiver,
             msg.value,
             block.timestamp,
             _text,
-            true,
-            msg.sender,
-            _receiver
+            true
         );
     }
 
