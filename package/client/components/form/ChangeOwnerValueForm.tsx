@@ -5,14 +5,12 @@ import { useState } from "react";
 type Props = {
   processing: boolean;
   currentValue: BigNumber | undefined;
-  getValue: () => void;
   changeValue: (limits: BigNumber) => void;
 };
 
 export default function ChangeOwnerValueForm({
   processing,
   currentValue: currentLimits,
-  getValue: getLimits,
   changeValue: changeValue,
 }: Props) {
   const [limits, setLimits] = useState<string>("0");
@@ -44,7 +42,6 @@ export default function ChangeOwnerValueForm({
           <button
             onClick={() => {
               changeValue(BigNumber.from(limits));
-              getLimits();
             }}
           >
             change{" "}

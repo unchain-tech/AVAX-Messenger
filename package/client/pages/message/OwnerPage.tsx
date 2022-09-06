@@ -7,15 +7,10 @@ import ChangeOwnerValueForm from "../../components/form/ChangeOwnerValueForm";
 
 export default function OwnerPage() {
   const { currentAccount, connectWallet } = useWallet();
-  const {
-    processing,
-    owner,
-    numOfPendingLimits,
-    getNumOfPendingLimits,
-    changeNumOfPendingLimits,
-  } = useMessengerContract({
-    currentAccount: currentAccount,
-  });
+  const { processing, owner, numOfPendingLimits, changeNumOfPendingLimits } =
+    useMessengerContract({
+      currentAccount: currentAccount,
+    });
 
   return (
     <Layout>
@@ -27,7 +22,6 @@ export default function OwnerPage() {
           <ChangeOwnerValueForm
             processing={processing}
             currentValue={numOfPendingLimits}
-            getValue={getNumOfPendingLimits}
             changeValue={changeNumOfPendingLimits}
           />
         ) : (

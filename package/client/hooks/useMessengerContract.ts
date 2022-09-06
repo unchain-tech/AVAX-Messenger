@@ -30,7 +30,6 @@ type ReturnUseMessengerContract = {
   sendMessage: (props: PropsSendMessage) => void;
   acceptMessage: (index: BigNumber) => void;
   denyMessage: (index: BigNumber) => void;
-  getNumOfPendingLimits: () => void;
   changeNumOfPendingLimits: (limits: BigNumber) => void;
 };
 
@@ -281,7 +280,6 @@ export const useMessengerContract = ({
     sendMessage,
     acceptMessage,
     denyMessage,
-    getNumOfPendingLimits,
     changeNumOfPendingLimits,
   };
 };
