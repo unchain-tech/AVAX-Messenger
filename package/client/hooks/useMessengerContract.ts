@@ -208,7 +208,7 @@ export const useMessengerContract = ({
       text: string,
       isPending: boolean
     ) => {
-      console.log("NewMessage from %s", sender);
+      console.log("NewMessage from %s to %s", sender, receiver);
       if (receiver.toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => [
           ...prevState,
