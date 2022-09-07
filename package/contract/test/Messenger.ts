@@ -114,9 +114,11 @@ describe("Messenger", function () {
         deployContract
       );
 
+      // メッセージ保留数の上限まで otherAccount へメッセージを送信します。
       for (let cnt = 1; cnt <= numOfPendingLimits; cnt++) {
         await messenger.post("dummy", otherAccount.address);
       }
+      // 次に送信するメッセージはキャンセルされます。
       await expect(
         messenger.post("exceed", otherAccount.address)
       ).to.be.revertedWith(
