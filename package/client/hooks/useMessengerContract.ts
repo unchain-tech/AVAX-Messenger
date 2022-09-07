@@ -231,6 +231,8 @@ export const useMessengerContract = ({
         index.toNumber(),
         receiver
       );
+      // 自分宛のメッセージの場合ownMessagesを編集します。
+      // 各APIの使用によりアドレス英字が大文字小文字の違いが出る場合がありますが, その違いはアドレス値において区別されません。
       if (receiver.toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => {
           prevState[index.toNumber()].isPending = false;
