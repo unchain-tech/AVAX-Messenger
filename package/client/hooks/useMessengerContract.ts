@@ -16,12 +16,14 @@ export type Message = {
   isPending: boolean;
 };
 
+// sendMessageの引数のオブジェクトの型定義です。
 type PropsSendMessage = {
   text: string;
   receiver: string;
   tokenInEther: string;
 };
 
+// useMessengerContractの返すオブジェクトの型定義です。
 type ReturnUseMessengerContract = {
   processing: boolean;
   ownMessages: Message[];
@@ -33,6 +35,7 @@ type ReturnUseMessengerContract = {
   changeNumOfPendingLimits: (limits: BigNumber) => void;
 };
 
+// useMessengerContractの引数のオブジェクトの型定義です。
 type PropsUseMessengerContract = {
   currentAccount: string | undefined;
 };
