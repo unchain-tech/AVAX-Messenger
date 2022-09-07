@@ -10,8 +10,8 @@ type Props = {
 
 export default function ChangeOwnerValueForm({
   processing,
-  currentValue: currentLimits,
-  changeValue: changeValue,
+  currentValue,
+  changeValue,
 }: Props) {
   const [limits, setLimits] = useState<string>("0");
 
@@ -24,7 +24,7 @@ export default function ChangeOwnerValueForm({
         {processing ? (
           <p>processing...</p>
         ) : (
-          <p>current limits: {currentLimits?.toNumber()}</p>
+          <p>current limits: {currentValue?.toNumber()}</p>
         )}
 
         <input

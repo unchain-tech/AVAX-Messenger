@@ -2,7 +2,6 @@ import Layout from "../components/layout/Layout";
 import RequireWallet from "../components/layout/RequireWallet";
 import { useWallet } from "../hooks/useWallet";
 import { useMessengerContract } from "../hooks/useMessengerContract";
-import Error from "../components/error/Error";
 import ChangeOwnerValueForm from "../components/form/ChangeOwnerValueForm";
 
 export default function OwnerPage() {
@@ -25,7 +24,7 @@ export default function OwnerPage() {
             changeValue={changeNumOfPendingLimits}
           />
         ) : (
-          <Error statusCode={404} />
+          <div>Unauthorized</div>
         )}
       </RequireWallet>
     </Layout>
