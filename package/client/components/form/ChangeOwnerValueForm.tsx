@@ -33,7 +33,6 @@ export default function ChangeOwnerValueForm({
           placeholder="limits"
           id="input_limits"
           min={0}
-          defaultValue={currentLimits?.toString()}
           className={styles.number}
           onChange={(e) => setLimits(e.target.value)}
         />

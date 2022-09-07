@@ -37,7 +37,7 @@ const Home: NextPage = () => {
 
             {owner === currentAccount && (
               <div className={styles.card}>
-                <Link href="/message/OwnerPage">
+                <Link href="/OwnerPage">
                   <h2>owner &rarr;</h2>
                 </Link>
                 <p>Owner page</p>
