@@ -1,6 +1,6 @@
 name: contract test
 
-on: [pull_request]
+on: [push]
 
 jobs:
   unit:
