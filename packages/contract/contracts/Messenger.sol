@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.17;
 
 import "hardhat/console.sol";
 import "./Ownable.sol";
@@ -20,9 +20,9 @@ contract Messenger is Ownable {
     }
 
     // メッセージの受取人アドレスをkeyにメッセージを保存します。
-    mapping(address => Message[]) private messagesAtAddress;
+    mapping(address => Message[]) private _messagesAtAddress;
     // ユーザが保留中のメッセージの数を保存します。
-    mapping(address => uint256) private numOfPendingAtAddress;
+    mapping(address => uint256) private _numOfPendingAtAddress;
 
     event NewMessage(
         address sender,
@@ -51,18 +51,18 @@ contract Messenger is Ownable {
     }
 
     // ユーザからメッセージを受け取り, 状態変数に格納します。
-    function post(string memory _text, address payable _receiver)
-        public
-        payable
-    {
+    function post(
+        string memory _text,
+        address payable _receiver
+    ) public payable {
         // メッセージ受取人の保留できるメッセージが上限に達しているかを確認します。
         require(
-            numOfPendingAtAddress[_receiver] < numOfPendingLimits,
+            _numOfPendingAtAddress[_receiver] < numOfPendingLimits,
             "The receiver has reached the number of pending limits"
         );
 
         // 保留中のメッセージの数をインクリメントします。
-        numOfPendingAtAddress[_receiver] += 1;
+        _numOfPendingAtAddress[_receiver] += 1;
 
         console.log(
             "%s posts text:[%s] token:[%d]",
@@ -71,7 +71,7 @@ contract Messenger is Ownable {
             msg.value
         );
 
-        messagesAtAddress[_receiver].push(
+        _messagesAtAddress[_receiver].push(
             Message(
                 payable(msg.sender),
                 _receiver,
@@ -95,35 +95,35 @@ contract Messenger is Ownable {
     // メッセージ受け取りを承諾して, AVAXを受け取ります。
     function accept(uint256 _index) public {
         //指定インデックスのメッセージを確認します。
-        confirmMessage(_index);
+        _confirmMessage(_index);
 
-        Message memory message = messagesAtAddress[msg.sender][_index];
+        Message memory message = _messagesAtAddress[msg.sender][_index];
 
         // メッセージの受取人にavaxを送信します。
-        sendAvax(message.receiver, message.depositInWei);
+        _sendAvax(message.receiver, message.depositInWei);
 
         emit MessageConfirmed(message.receiver, _index);
     }
 
     // メッセージ受け取りを却下して, AVAXをメッセージ送信者へ返却します。
     function deny(uint256 _index) public payable {
-        confirmMessage(_index);
+        _confirmMessage(_index);
 
-        Message memory message = messagesAtAddress[msg.sender][_index];
+        Message memory message = _messagesAtAddress[msg.sender][_index];
 
         // メッセージの送信者にavaxを返却します。
-        sendAvax(message.sender, message.depositInWei);
+        _sendAvax(message.sender, message.depositInWei);
 
         emit MessageConfirmed(message.receiver, _index);
     }
 
-    function confirmMessage(uint256 _index) private {
-        Message storage message = messagesAtAddress[msg.sender][_index];
+    function _confirmMessage(uint256 _index) private {
+        Message storage message = _messagesAtAddress[msg.sender][_index];
 
         // 関数を呼び出したアドレスとメッセージの受取人アドレスが同じか確認します。
         require(
             msg.sender == message.receiver,
-            "Only the receiver can confirmMessage the message"
+            "Only the receiver can _confirmMessage the message"
         );
 
         // メッセージが保留中であることを確認します。
@@ -136,16 +136,16 @@ contract Messenger is Ownable {
         message.isPending = false;
 
         // ユーザの保留中のメッセージの数をデクリメントします。
-        numOfPendingAtAddress[message.receiver] -= 1;
+        _numOfPendingAtAddress[message.receiver] -= 1;
     }
 
-    function sendAvax(address payable _to, uint256 _amountInWei) private {
+    function _sendAvax(address payable _to, uint256 _amountInWei) private {
         (bool success, ) = (_to).call{value: _amountInWei}("");
         require(success, "Failed to withdraw AVAX from contract");
     }
 
     // ユーザのアドレス宛のメッセージを全て取得します。
     function getOwnMessages() public view returns (Message[] memory) {
-        return messagesAtAddress[msg.sender];
+        return _messagesAtAddress[msg.sender];
     }
 }

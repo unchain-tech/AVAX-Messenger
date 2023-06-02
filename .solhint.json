@@ -15,6 +15,7 @@
     "imports-on-top": "error",
     "multiple-sends": "warn",
     "no-complex-fallback": "warn",
+    "no-console": "warn",
     "no-empty-blocks": "warn",
     "no-global-import": "off",
     "no-unused-vars": "error",
