@@ -1,0 +1,25 @@
+{
+  "name": "avax-messenger",
+  "version": "1.0.0",
+  "description": "Message dapp that allows text and tokens (AVAX) to be exchanged.",
+  "license": "",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unchain-tech/AVAX-Messenger.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/unchain-tech/AVAX-Messenger/issues"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "contract": "yarn workspace contract",
+    "client": "yarn workspace client",
+    "test": "yarn contract test"
+  }
+}
