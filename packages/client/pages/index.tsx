@@ -1,10 +1,11 @@
-import type { NextPage } from "next";
-import styles from "../styles/Home.module.css";
-import Link from "next/link";
-import RequireWallet from "../components/layout/RequireWallet";
-import Layout from "../components/layout/Layout";
-import { useWallet } from "../hooks/useWallet";
-import { useMessengerContract } from "../hooks/useMessengerContract";
+import type { NextPage } from 'next';
+import Link from 'next/link';
+
+import Layout from '../components/layout/Layout';
+import RequireWallet from '../components/layout/RequireWallet';
+import { useMessengerContract } from '../hooks/useMessengerContract';
+import { useWallet } from '../hooks/useWallet';
+import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   const { currentAccount, connectWallet } = useWallet();

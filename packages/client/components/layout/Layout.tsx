@@ -1,6 +1,7 @@
-import Head from "next/head";
-import styles from "./Layout.module.css";
-import Link from "next/link";
+import Head from 'next/head';
+import Link from 'next/link';
+
+import styles from './Layout.module.css';
 
 type Props = {
   children: React.ReactNode;

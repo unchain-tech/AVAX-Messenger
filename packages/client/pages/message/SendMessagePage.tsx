@@ -1,8 +1,8 @@
-import Layout from "../../components/layout/Layout";
-import RequireWallet from "../../components/layout/RequireWallet";
-import { useWallet } from "../../hooks/useWallet";
-import { useMessengerContract } from "../../hooks/useMessengerContract";
-import SendMessageForm from "../../components/form/SendMessageForm";
+import SendMessageForm from '../../components/form/SendMessageForm';
+import Layout from '../../components/layout/Layout';
+import RequireWallet from '../../components/layout/RequireWallet';
+import { useMessengerContract } from '../../hooks/useMessengerContract';
+import { useWallet } from '../../hooks/useWallet';
 
 export default function SendMessagePage() {
   const { currentAccount, connectWallet } = useWallet();
@@ -23,7 +23,7 @@ export default function SendMessagePage() {
             sendMessage={(
               text: string,
               receiver: string,
-              tokenInEther: string
+              tokenInEther: string,
             ) => {
               sendMessage({ text, receiver, tokenInEther });
             }}

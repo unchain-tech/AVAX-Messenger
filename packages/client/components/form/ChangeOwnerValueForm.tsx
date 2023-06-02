@@ -1,6 +1,7 @@
-import styles from "./Form.module.css";
-import { BigNumber } from "ethers";
-import { useState } from "react";
+import { BigNumber } from 'ethers';
+import { useState } from 'react';
+
+import styles from './Form.module.css';
 
 type Props = {
   processing: boolean;
@@ -13,7 +14,7 @@ export default function ChangeOwnerValueForm({
   currentValue,
   changeValue,
 }: Props) {
-  const [limits, setLimits] = useState<string>("0");
+  const [limits, setLimits] = useState<string>('0');
 
   return (
     <div className={styles.container}>
@@ -43,7 +44,7 @@ export default function ChangeOwnerValueForm({
               changeValue(BigNumber.from(limits));
             }}
           >
-            change{" "}
+            change{' '}
           </button>
         </div>
       </div>

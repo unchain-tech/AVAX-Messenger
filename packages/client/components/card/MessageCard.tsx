@@ -1,6 +1,7 @@
-import { ethers } from "ethers";
-import { Message } from "../../hooks/useMessengerContract";
-import styles from "./MessageCard.module.css";
+import { ethers } from 'ethers';
+
+import { Message } from '../../hooks/useMessengerContract';
+import styles from './MessageCard.module.css';
 
 type Props = {
   message: Message;

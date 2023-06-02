@@ -1,14 +1,15 @@
-import styles from "./Form.module.css";
-import { useState } from "react";
+import { useState } from 'react';
+
+import styles from './Form.module.css';
 
 type Props = {
   sendMessage: (text: string, receiver: string, tokenInEther: string) => void;
 };
 
 export default function SendMessageForm({ sendMessage }: Props) {
-  const [textValue, setTextValue] = useState("");
-  const [receiverAccountValue, setReceiverAccountValue] = useState("");
-  const [tokenValue, setTokenValue] = useState("0");
+  const [textValue, setTextValue] = useState('');
+  const [receiverAccountValue, setReceiverAccountValue] = useState('');
+  const [tokenValue, setTokenValue] = useState('0');
 
   return (
     <div className={styles.container}>
@@ -46,7 +47,7 @@ export default function SendMessageForm({ sendMessage }: Props) {
               sendMessage(textValue, receiverAccountValue, tokenValue);
             }}
           >
-            send{" "}
+            send{' '}
           </button>
         </div>
       </div>

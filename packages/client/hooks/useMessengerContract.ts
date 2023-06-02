@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
-import { BigNumber, ethers } from "ethers";
-import abi from "../utils/Messenger.json";
-import { getEthereum } from "../utils/ethereum";
-import { Messenger as MessengerType } from "../typechain-types";
+import { BigNumber, ethers } from 'ethers';
+import { useEffect, useState } from 'react';
 
-const contractAddress = "0x8d802812CB9C744eFA5725dCfF21e272c3019310";
+import { Messenger as MessengerType } from '../typechain-types';
+import { getEthereum } from '../utils/ethereum';
+import abi from '../utils/Messenger.json';
+
+const contractAddress = '0x8d802812CB9C744eFA5725dCfF21e272c3019310';
 const contractABI = abi.abi;
 
 export type Message = {
@@ -53,13 +54,14 @@ export const useMessengerContract = ({
   function getMessengerContract() {
     try {
       if (ethereum) {
-        // @ts-ignore: ethereum as ethers.providers.ExternalProvider
-        const provider = new ethers.providers.Web3Provider(ethereum);
+        const provider = new ethers.providers.Web3Provider(
+          ethereum as unknown as ethers.providers.ExternalProvider,
+        );
         const signer = provider.getSigner();
         const MessengerContract = new ethers.Contract(
           contractAddress,
           contractABI,
-          signer
+          signer,
         ) as MessengerType;
         setMessengerContract(MessengerContract);
       } else {
@@ -99,18 +101,18 @@ export const useMessengerContract = ({
     try {
       const tokenInWei = ethers.utils.parseEther(tokenInEther);
       console.log(
-        "call post with receiver:[%s], token:[%s]",
+        'call post with receiver:[%s], token:[%s]',
         receiver,
-        tokenInWei.toString()
+        tokenInWei.toString(),
       );
       const txn = await messengerContract.post(text, receiver, {
         gasLimit: 300000,
         value: tokenInWei,
       });
-      console.log("Processing...", txn.hash);
+      console.log('Processing...', txn.hash);
       setProcessing(true);
       await txn.wait();
-      console.log("Done -- ", txn.hash);
+      console.log('Done -- ', txn.hash);
       setProcessing(false);
     } catch (error) {
       console.log(error);
@@ -120,14 +122,14 @@ export const useMessengerContract = ({
   async function acceptMessage(index: BigNumber) {
     if (!messengerContract) return;
     try {
-      console.log("call accept with index [%d]", index);
+      console.log('call accept with index [%d]', index);
       const txn = await messengerContract.accept(index, {
         gasLimit: 300000,
       });
-      console.log("Processing...", txn.hash);
+      console.log('Processing...', txn.hash);
       setProcessing(true);
       await txn.wait();
-      console.log("Done -- ", txn.hash);
+      console.log('Done -- ', txn.hash);
       setProcessing(false);
     } catch (error) {
       console.log(error);
@@ -137,14 +139,14 @@ export const useMessengerContract = ({
   async function denyMessage(index: BigNumber) {
     if (!messengerContract) return;
     try {
-      console.log("call deny with index [%d]", index);
+      console.log('call deny with index [%d]', index);
       const txn = await messengerContract.deny(index, {
         gasLimit: 300000,
       });
-      console.log("Processing...", txn.hash);
+      console.log('Processing...', txn.hash);
       setProcessing(true);
       await txn.wait();
-      console.log("Done -- ", txn.hash);
+      console.log('Done -- ', txn.hash);
       setProcessing(false);
     } catch (error) {
       console.log(error);
@@ -154,7 +156,7 @@ export const useMessengerContract = ({
   async function getOwner() {
     if (!messengerContract) return;
     try {
-      console.log("call getter of owner");
+      console.log('call getter of owner');
       const owner = await messengerContract.owner();
       setOwner(owner.toLocaleLowerCase());
     } catch (error) {
@@ -165,7 +167,7 @@ export const useMessengerContract = ({
   async function getNumOfPendingLimits() {
     if (!messengerContract) return;
     try {
-      console.log("call getter of numOfPendingLimits");
+      console.log('call getter of numOfPendingLimits');
       const limits = await messengerContract.numOfPendingLimits();
       setNumOfPendingLimits(limits);
     } catch (error) {
@@ -176,14 +178,14 @@ export const useMessengerContract = ({
   async function changeNumOfPendingLimits(limits: BigNumber) {
     if (!messengerContract) return;
     try {
-      console.log("call changeNumOfPendingLimits with [%d]", limits.toNumber());
+      console.log('call changeNumOfPendingLimits with [%d]', limits.toNumber());
       const txn = await messengerContract.changeNumOfPendingLimits(limits, {
         gasLimit: 300000,
       });
-      console.log("Processing...", txn.hash);
+      console.log('Processing...', txn.hash);
       setProcessing(true);
       await txn.wait();
-      console.log("Done -- ", txn.hash);
+      console.log('Done -- ', txn.hash);
       setProcessing(false);
     } catch (error) {
       console.log(error);
@@ -209,9 +211,9 @@ export const useMessengerContract = ({
       depositInWei: BigNumber,
       timestamp: BigNumber,
       text: string,
-      isPending: boolean
+      isPending: boolean,
     ) => {
-      console.log("NewMessage from %s to %s", sender, receiver);
+      console.log('NewMessage from %s to %s', sender, receiver);
       // 接続しているユーザ宛のメッセージの場合ownMessagesを編集します。
       // 各APIの使用によりアドレス英字が大文字小文字の違いが出る場合がありますが, その違いはアドレス値において区別されません。
       if (receiver.toLocaleLowerCase() === currentAccount) {
@@ -232,9 +234,9 @@ export const useMessengerContract = ({
     // MessageConfirmedのイベントリスナ
     const onMessageConfirmed = (receiver: string, index: BigNumber) => {
       console.log(
-        "MessageConfirmed index:[%d] receiver: [%s]",
+        'MessageConfirmed index:[%d] receiver: [%s]',
         index.toNumber(),
-        receiver
+        receiver,
       );
       if (receiver.toLocaleLowerCase() === currentAccount) {
         setOwnMessages((prevState) => {
@@ -247,30 +249,30 @@ export const useMessengerContract = ({
     // NumOfPendingLimitsChangedのイベントリスナ
     const onNumOfPendingLimitsChanged = (limitsChanged: BigNumber) => {
       console.log(
-        "NumOfPendingLimitsChanged limits:[%d]",
-        limitsChanged.toNumber()
+        'NumOfPendingLimitsChanged limits:[%d]',
+        limitsChanged.toNumber(),
       );
       setNumOfPendingLimits(limitsChanged);
     };
 
     /* イベントリスナーの登録をします */
     if (messengerContract) {
-      messengerContract.on("NewMessage", onNewMessage);
-      messengerContract.on("MessageConfirmed", onMessageConfirmed);
+      messengerContract.on('NewMessage', onNewMessage);
+      messengerContract.on('MessageConfirmed', onMessageConfirmed);
       messengerContract.on(
-        "NumOfPendingLimitsChanged",
-        onNumOfPendingLimitsChanged
+        'NumOfPendingLimitsChanged',
+        onNumOfPendingLimitsChanged,
       );
     }
 
     /* イベントリスナーの登録を解除します */
     return () => {
       if (messengerContract) {
-        messengerContract.off("NewMessage", onNewMessage);
-        messengerContract.off("MessageConfirmed", onMessageConfirmed);
+        messengerContract.off('NewMessage', onNewMessage);
+        messengerContract.off('MessageConfirmed', onMessageConfirmed);
         messengerContract.off(
-          "NumOfPendingLimitsChanged",
-          onNumOfPendingLimitsChanged
+          'NumOfPendingLimitsChanged',
+          onNumOfPendingLimitsChanged,
         );
       }
     };

@@ -1,9 +1,10 @@
-import MessageCard from "../../components/card/MessageCard";
-import Layout from "../../components/layout/Layout";
-import RequireWallet from "../../components/layout/RequireWallet";
-import { useMessengerContract } from "../../hooks/useMessengerContract";
-import { useWallet } from "../../hooks/useWallet";
-import { BigNumber } from "ethers";
+import { BigNumber } from 'ethers';
+
+import MessageCard from '../../components/card/MessageCard';
+import Layout from '../../components/layout/Layout';
+import RequireWallet from '../../components/layout/RequireWallet';
+import { useMessengerContract } from '../../hooks/useMessengerContract';
+import { useWallet } from '../../hooks/useWallet';
 
 export default function ConfirmMessagePage() {
   const { currentAccount, connectWallet } = useWallet();

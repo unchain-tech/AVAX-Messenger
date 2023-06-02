@@ -1,4 +1,4 @@
-import styles from "./RequireWallet.module.css";
+import styles from './RequireWallet.module.css';
 
 type Props = {
   children: React.ReactNode;

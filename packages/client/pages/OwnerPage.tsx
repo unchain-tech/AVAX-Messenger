@@ -1,8 +1,8 @@
-import Layout from "../components/layout/Layout";
-import RequireWallet from "../components/layout/RequireWallet";
-import { useWallet } from "../hooks/useWallet";
-import { useMessengerContract } from "../hooks/useMessengerContract";
-import ChangeOwnerValueForm from "../components/form/ChangeOwnerValueForm";
+import ChangeOwnerValueForm from '../components/form/ChangeOwnerValueForm';
+import Layout from '../components/layout/Layout';
+import RequireWallet from '../components/layout/RequireWallet';
+import { useMessengerContract } from '../hooks/useMessengerContract';
+import { useWallet } from '../hooks/useWallet';
 
 export default function OwnerPage() {
   const { currentAccount, connectWallet } = useWallet();
