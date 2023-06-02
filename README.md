@@ -9,8 +9,8 @@
 ```
 git clone [this_repository]
 cd [this_repository]
-npm install
-npm run dev
+yarn install
+yarn client dev
 ```
 
 After executing the above command, access `localhost:3000` in your browser.
@@ -34,7 +34,7 @@ test & deploy
 
 ### Directory structure
 
-Root: `package/contract`
+Root: `packages/contract`
 
 - `Messenger.sol`  
   Implementing Messenger contract core code.
@@ -67,7 +67,7 @@ Root: `package/contract`
 
 ### Directory structure
 
-Root: `package/client`
+Root: `packages/client`
 
 - `components`, `hooks`, `pages`, `styles`  
   Directories containing client side code
