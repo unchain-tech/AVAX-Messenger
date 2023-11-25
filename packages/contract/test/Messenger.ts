@@ -1,3 +1,4 @@
+import { anyValue } from '@nomicfoundation/hardhat-chai-matchers/withArgs';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import { Overrides } from 'ethers';
@@ -57,20 +58,28 @@ describe('Messenger', function () {
     it('Should emit an event on change limits', async function () {
       const { messenger } = await loadFixture(deployContract);
 
-      await expect(messenger.changeNumOfPendingLimits(10)).to.emit(
-        messenger,
-        'NumOfPendingLimitsChanged',
-      );
+      await expect(messenger.changeNumOfPendingLimits(10))
+        .to.emit(messenger, 'NumOfPendingLimitsChanged')
+        .withArgs(10);
     });
   });
 
   describe('Post', function () {
     it('Should emit an event on post', async function () {
-      const { messenger, otherAccount } = await loadFixture(deployContract);
+      const { messenger, owner, otherAccount } = await loadFixture(
+        deployContract,
+      );
 
-      await expect(
-        messenger.post('text', otherAccount.address, { value: 1 }),
-      ).to.emit(messenger, 'NewMessage');
+      await expect(messenger.post('text', otherAccount.address, { value: 1 }))
+        .to.emit(messenger, 'NewMessage')
+        .withArgs(
+          owner.address,
+          otherAccount.address,
+          1,
+          anyValue,
+          'text',
+          true,
+        );
     });
 
     it('Should send the correct amount of tokens', async function () {
@@ -137,10 +146,9 @@ describe('Messenger', function () {
       });
 
       const first_index = 0;
-      await expect(messenger.connect(otherAccount).accept(first_index)).to.emit(
-        messenger,
-        'MessageConfirmed',
-      );
+      await expect(messenger.connect(otherAccount).accept(first_index))
+        .to.emit(messenger, 'MessageConfirmed')
+        .withArgs(otherAccount.address, first_index);
     });
 
     it('isPending must be changed', async function () {
@@ -186,7 +194,7 @@ describe('Messenger', function () {
   });
 
   describe('Deny', function () {
-    it('Should emit an event on accept', async function () {
+    it('Should emit an event on deny', async function () {
       const { messenger, otherAccount } = await loadFixture(deployContract);
       const test_deposit = 1;
 
@@ -195,10 +203,9 @@ describe('Messenger', function () {
       });
 
       const first_index = 0;
-      await expect(messenger.connect(otherAccount).deny(first_index)).to.emit(
-        messenger,
-        'MessageConfirmed',
-      );
+      await expect(messenger.connect(otherAccount).deny(first_index))
+        .to.emit(messenger, 'MessageConfirmed')
+        .withArgs(otherAccount.address, first_index);
     });
 
     it('isPending must be changed', async function () {
