@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.17;
 
-import "hardhat/console.sol";
 import "./Ownable.sol";
 
 contract Messenger is Ownable {
@@ -37,8 +36,6 @@ contract Messenger is Ownable {
     event NumOfPendingLimitsChanged(uint256 limits);
 
     constructor(uint256 _numOfPendingLimits) payable {
-        console.log("Here is my first smart contract!");
-
         ownable();
 
         numOfPendingLimits = _numOfPendingLimits;
@@ -63,13 +60,6 @@ contract Messenger is Ownable {
 
         // 保留中のメッセージの数をインクリメントします。
         _numOfPendingAtAddress[_receiver] += 1;
-
-        console.log(
-            "%s posts text:[%s] token:[%d]",
-            msg.sender,
-            _text,
-            msg.value
-        );
 
         _messagesAtAddress[_receiver].push(
             Message(
